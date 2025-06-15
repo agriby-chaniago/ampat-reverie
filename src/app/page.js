@@ -1,10 +1,10 @@
-import Apakek from "@/components/Apakek";
+import GridLayout from "@/components/GridLayout";
 
 export default function Home() {
   return (
-    <main className='flex items-center justify-center min-h-screen'>
-      <h1 className='text-2xl font-bold'>Hello, world!</h1>
-      <Apakek />
+    <main className='flex flex-col items-center justify-center min-h-screen'>
+      <GridLayout />
+      <h1 className=''>anjay</h1>
     </main>
   );
 }

@@ -1,27 +1,15 @@
 export default function LeftLargeArea() {
   return (
-    <div
-      className='absolute border border-gray-300'
-      style={{
-        width: "737px",
-        height: "765px",
-        top: "205px",
-        left: "79px",
-        borderRadius: "20px",
-      }}
-    >
-      {/* Isi konten di sini */}
+    <div className='absolute flex items-center justify-center border border-gray-300 rounded-[20px] w-[1044px] h-[824px] top-[198px] left-[64px]'>
       <div
         className='absolute flex items-center justify-center bg-white shadow-lg rounded-xl'
         style={{
-          width: "550px",
-          height: "186px",
-          top: "289px",
-          left: "167px",
+          width: "596px",
+          height: "202px",
         }}
       >
         {/* Konten di sini */}
-        <p className='text-gray-800'>Konten rata tengah</p>
+        <p className='text-gray-800'>Konten rata tengah (ceritanya)</p>
       </div>
     </div>
   );

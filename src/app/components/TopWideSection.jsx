@@ -5,8 +5,6 @@ export default function TopWideSection() {
       style={{
         width: "737px",
         height: "82px",
-        top: "102px",
-        left: "79px",
         borderRadius: "20px",
       }}
     >

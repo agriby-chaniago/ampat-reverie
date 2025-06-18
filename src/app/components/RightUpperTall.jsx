@@ -3,12 +3,11 @@ export default function RightUpperTall() {
     <div
       className="absolute bg-white border border-black p-6"
       style={{
-        width: '694px',
-        height: '425px',
-        top: '235px',
-        left: '1138px',
+        width: '716px',
+        height: '458px',
+        top: '198px',
+        left: '1140px',
         borderRadius: '20px',
-        borderWidth: '1px',
       }}
     >
       <h2

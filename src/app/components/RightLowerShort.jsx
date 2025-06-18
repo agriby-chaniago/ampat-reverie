@@ -1,14 +1,15 @@
+'use client';
+
 export default function RightLowerShort() {
   return (
     <div
       className="absolute bg-white p-6"
       style={{
-        width: '694px',
-        height: '307px',
-        top: '690px',
-        left: '1138px',
+        width: '716px',
+        height: '334px',
+        top: '688px',
+        left: '1140px',
         borderRadius: '20px',
-        borderWidth: '1px',
       }}
     >
       <h1
@@ -38,14 +39,17 @@ export default function RightLowerShort() {
 
       <button
         style={{
-          width: '549.85498046875px',
-          height: '71.18840789794922px',
-          top: '850.17px',
-          left: '1207.4px',
+          width: '574px',
+          height: '78px',
           borderRadius: '50px',
-          backgroundColor: '#000', // Bisa kamu sesuaikan warnanya
+          backgroundColor: '#000',
           color: '#fff',
-          marginTop: '20px',
+          border: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          margin: '30px auto 0', // tombol berada di tengah horizontal
         }}
       >
         <h3
@@ -55,6 +59,7 @@ export default function RightLowerShort() {
             fontSize: '20px',
             lineHeight: '25px',
             letterSpacing: '0%',
+            margin: 0,
           }}
         >
           Tombol Aksi

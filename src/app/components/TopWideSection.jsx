@@ -3,8 +3,10 @@ export default function TopWideSection() {
     <div
       className='fixed flex items-center justify-between px-6 py-4 bg-white shadow-lg'
       style={{
-        width: "737px",
-        height: "82px",
+        width: "1044px",
+        height: "102px",
+        top: "64px",
+        left: "64px",
         borderRadius: "20px",
       }}
     >

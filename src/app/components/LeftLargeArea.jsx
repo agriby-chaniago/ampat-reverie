@@ -1,19 +1,11 @@
 export default function LeftLargeArea() {
   return (
-    <div
-      className='absolute border border-gray-300'
-      style={{
-        width: "737px",
-        height: "765px",
-        borderRadius: "20px",
-      }}
-    >
-      {/* Isi konten di sini */}
+    <div className='absolute flex items-center justify-center border border-gray-300 rounded-[20px] w-[1044px] h-[824px] top-[198px] left-[64px]'>
       <div
         className='absolute flex items-center justify-center bg-white shadow-lg rounded-xl'
         style={{
-          width: "550px",
-          height: "186px",
+          width: "596px",
+          height: "202px",
         }}
       >
         {/* Konten di sini */}

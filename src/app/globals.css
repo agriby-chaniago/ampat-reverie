@@ -4,3 +4,11 @@
 body {
   @apply bg-[url('/assets/bg.jpg')] bg-cover bg-center;
 }
+
+.font-gully {
+  font-family: var(--font-gully);
+}
+
+.font-sunflower {
+  font-family: var(--font-sunflower);
+}

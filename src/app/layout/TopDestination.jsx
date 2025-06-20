@@ -7,7 +7,7 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-// Reusable content component
+// Reusable Slide Content Component
 /**
  * @param {Object} props
  * @param {string} props.title
@@ -20,33 +20,10 @@ const SlideContent = ({
   return (
     <div className="relative h-full w-full flex flex-col justify-end pb-36">
       <div className="px-16">
-        <h2
-          style={{
-            fontFamily: 'Gully, sans-serif',
-            fontWeight: 400,
-            fontSize: '100px',
-            lineHeight: '100px',
-            letterSpacing: '0%',
-            color: 'white',
-            width: '100%',
-            maxWidth: '800px',
-            marginBottom: '30px',
-          }}
-        >
+        <h2 className="text-white font-[Gully] font-normal text-[100px] leading-[100px] max-w-[800px] mb-[30px]">
           {title}
         </h2>
-        <p
-          style={{
-            fontFamily: 'Gully, sans-serif',
-            fontWeight: 300,
-            fontSize: '45px',
-            lineHeight: '55px',
-            letterSpacing: '0%',
-            color: 'white',
-            width: '100%',
-            maxWidth: '756px',
-          }}
-        >
+        <p className="text-white font-[Gully] font-light text-[45px] leading-[55px] max-w-[756px]">
           {description}
         </p>
       </div>
@@ -63,7 +40,6 @@ export default function TopDestination() {
         modules={[Pagination]}
         className="h-full w-full"
       >
-        {/* Slide 1 */}
         <SwiperSlide>
           <SlideContent
             title="Top Destination"
@@ -71,7 +47,6 @@ export default function TopDestination() {
           />
         </SwiperSlide>
 
-        {/* Slide 2 */}
         <SwiperSlide>
           <SlideContent
             title="Tokyo"
@@ -79,7 +54,6 @@ export default function TopDestination() {
           />
         </SwiperSlide>
 
-        {/* Slide 3 */}
         <SwiperSlide>
           <SlideContent
             title="Bali"
@@ -87,7 +61,6 @@ export default function TopDestination() {
           />
         </SwiperSlide>
 
-        {/* Slide 4 */}
         <SwiperSlide>
           <SlideContent
             title="Paris"
@@ -95,7 +68,6 @@ export default function TopDestination() {
           />
         </SwiperSlide>
 
-        {/* Slide 5 */}
         <SwiperSlide>
           <SlideContent
             title="New York"
@@ -103,7 +75,6 @@ export default function TopDestination() {
           />
         </SwiperSlide>
 
-        {/* Slide 6 */}
         <SwiperSlide>
           <SlideContent
             title="Barcelona"

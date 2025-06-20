@@ -4,11 +4,3 @@
 body {
   @apply bg-[url('/assets/bg.png')] bg-no-repeat bg-cover bg-center min-h-screen;
 }
-
-.font-gully {
-  font-family: var(--font-gully);
-}
-
-.font-sunflower {
-  font-family: var(--font-sunflower);
-}

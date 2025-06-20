@@ -1,15 +1,25 @@
 import "./globals.css";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 
 // Gunakan font dari Google Fonts
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const Gully = localFont({
+  src: [
+    {
+      path: "./fonts/Gully/Gully-Light.ttf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Gully/Gully-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Gully/Gully-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+  ],
 });
 
 export const metadata = {
@@ -22,7 +32,7 @@ export default function RootLayout({ children }) {
     <html lang='en'>
       <body
         className={`
-          ${geistSans.variable} ${geistMono.variable}
+          ${Gully.variable}
           antialiased min-h-screen bg-background text-foreground
         `}
       >

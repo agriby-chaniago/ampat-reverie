@@ -1,18 +1,65 @@
 export default function RightLowerShort() {
   return (
-    <div className="absolute top-[688px] left-[1140px] w-[716px] h-[334px] bg-white p-6 rounded-[20px]">
-      <h1 className="font-[Gully] font-normal text-[28px] leading-[25px] tracking-[0%]">
+    <div
+      className='absolute bg-white p-6'
+      style={{
+        width: "716px",
+        height: "334px",
+        top: "688px",
+        left: "1140px",
+        borderRadius: "20px",
+      }}
+    >
+      <h1
+        style={{
+          fontFamily: "Gully, sans-serif",
+          fontWeight: 400,
+          fontSize: "28px",
+          lineHeight: "25px",
+          letterSpacing: "0%",
+        }}
+      >
         Judul Utama
       </h1>
 
-      <h2 className="font-[Gully] font-normal text-[24px] leading-[25px] tracking-[0%] mt-[10px]">
+      <h2
+        style={{
+          fontFamily: "Gully, sans-serif",
+          fontWeight: 400,
+          fontSize: "24px",
+          lineHeight: "25px",
+          letterSpacing: "0%",
+          marginTop: "10px",
+        }}
+      >
         Subjudul
       </h2>
 
       <button
-        className="w-[574px] h-[78px] rounded-full bg-black text-white border-none flex items-center justify-center cursor-pointer mt-[30px] mx-auto"
+        style={{
+          width: "574px",
+          height: "78px",
+          borderRadius: "50px",
+          backgroundColor: "#000",
+          color: "#fff",
+          border: "none",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          margin: "30px auto 0", // tombol berada di tengah horizontal
+        }}
       >
-        <h3 className="font-[Gully] font-normal text-[20px] leading-[25px] tracking-[0%] m-0">
+        <h3
+          style={{
+            fontFamily: "Gully, sans-serif",
+            fontWeight: 400,
+            fontSize: "20px",
+            lineHeight: "25px",
+            letterSpacing: "0%",
+            margin: 0,
+          }}
+        >
           Tombol Aksi
         </h3>
       </button>

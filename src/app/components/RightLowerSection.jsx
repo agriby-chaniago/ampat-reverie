@@ -1,6 +1,15 @@
 export default function RightLowerSection() {
   return (
-    <div className='col-start-8 col-end-11 row-start-7 row-end-10 bg-blue-200'>
+    <div
+      className="absolute bg-white border border-black"
+      style={{
+        width: '716px',
+        height: '318px',
+        top: '1782px',
+        left: '1140px',
+        borderRadius: '20px',
+      }}
+    >
       {/* Konten kanan bawah */}
     </div>
   );

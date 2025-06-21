@@ -1,28 +1,27 @@
 export default function CenterLargeArea() {
   return (
-    <div className="absolute top-[1278px] left-[64px] w-[1792px] h-[472px] bg-white border border-black p-12 rounded-[20px] overflow-hidden flex flex-col">
-      <div className="flex h-full">
-        {/* Left Side Content */}
-        <div className="flex-1 flex flex-col justify-between">
-          <h2 className="font-[Gully] font-normal text-[60px] leading-none mb-5">
-            H2 Text
-          </h2>
+    <div className="absolute top-[1278px] left-[64px] w-[1792px] h-[472px] flex overflow-hidden rounded-[20px] border border-white backdrop-blur-xs px-[60px] py-[40px]">
+      {/* Left Side */}
+      <div className="flex-1 flex flex-col justify-start gap-2 pr-8">
+        <h2 className="text-white font-[Gully] font-normal text-[60px] leading-[1.05]">
+          About
+        </h2>
+        <h1 className="text-white font-[Gully] font-bold text-[100px] leading-[1.05] mt-10">
+          RAJA AMPAT
+        </h1>
+        <p className="text-white font-[Gully] font-light text-[30px] leading-[1.2] max-w-[850px] mt-10">
+          Raja Ampat, meaning "Four Kings" in Indonesian, refers to the four main
+          islands: Misool, Salawati, Batanta, and Waigeo. This remote archipelago
+          in West Papua is home to the richest marine biodiversity on Earth.
+        </p>
+      </div>
 
-          <h1 className="font-[Gully] font-normal text-[115px] leading-none mb-5">
-            H1 Text
-          </h1>
-
-          <h4 className="font-[Gully] font-light text-[24px] leading-[1.3] max-w-[800px]">
-            Ini adalah H4 yang menjelaskan bagian tengah dengan teks panjang di bawah heading besar.
-          </h4>
-        </div>
-
-        {/* Right Side Content */}
-        <div className="w-1/3 flex items-center">
-          <h3 className="font-[Gully] font-light text-[40px] leading-[1.2]">
-            Ini adalah H3 untuk bagian kanan dari area besar ini.
-          </h3>
-        </div>
+      {/* Right Side (fixed width + height) */}
+      <div className="w-[492px] h-[332px] flex items-center justify-start my-auto mr-5">
+        <p className="text-white font-[Gully] font-light text-[56px] leading-[60px] tracking-tight text-left">
+          Discover the crown jewel of marine biodiversity where pristine nature
+          meets ancient culture
+        </p>
       </div>
     </div>
   );

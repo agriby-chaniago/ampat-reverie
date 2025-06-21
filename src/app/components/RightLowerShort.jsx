@@ -1,68 +1,25 @@
 export default function RightLowerShort() {
   return (
-    <div
-      className='absolute bg-white p-6'
-      style={{
-        width: "716px",
-        height: "334px",
-        top: "688px",
-        left: "1140px",
-        borderRadius: "20px",
-      }}
-    >
-      <h1
-        style={{
-          fontFamily: "Gully, sans-serif",
-          fontWeight: 400,
-          fontSize: "28px",
-          lineHeight: "25px",
-          letterSpacing: "0%",
-        }}
-      >
-        Judul Utama
-      </h1>
+    <div className="absolute top-[688px] left-[1140px] w-[716px] h-[334px] p-8 backdrop-blur-xs border border-white rounded-[20px] flex flex-col">
+      {/* Header content */}
+      <div className="flex flex-col mb-12 mt-6 ml-8">
+        <h1 className="font-[Gully] font-normal text-[28px] leading-[25px] tracking-[0%] text[ #102437]">
+          Find
+        </h1>
 
-      <h2
-        style={{
-          fontFamily: "Gully, sans-serif",
-          fontWeight: 400,
-          fontSize: "24px",
-          lineHeight: "25px",
-          letterSpacing: "0%",
-          marginTop: "10px",
-        }}
-      >
-        Subjudul
-      </h2>
-
-      <button
-        style={{
-          width: "574px",
-          height: "78px",
-          borderRadius: "50px",
-          backgroundColor: "#000",
-          color: "#fff",
-          border: "none",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          margin: "30px auto 0", // tombol berada di tengah horizontal
-        }}
-      >
-        <h3
-          style={{
-            fontFamily: "Gully, sans-serif",
-            fontWeight: 400,
-            fontSize: "20px",
-            lineHeight: "25px",
-            letterSpacing: "0%",
-            margin: 0,
-          }}
-        >
-          Tombol Aksi
-        </h3>
-      </button>
+        <h2 className="font-[Gully] font-normal text-[24px] leading-[25px] tracking-[0%] mt-[10px] opacity-60 text[ #102437]">
+          Your Journey
+        </h2>
+      </div>
+      
+      {/* Button positioned at the bottom */}
+      <div className="mb-8">
+        <button className="w-[574px] h-[78px] bg-[#102437] text-white rounded-full flex items-center justify-center cursor-pointer mx-auto border border-white transition-all duration-300 hover:bg-white hover:text-[#102437] hover:shadow-lg hover:scale-[1.02] hover:border-[#102437] group">
+          <span className="font-[Gully] font-normal text-[20px] leading-[25px] tracking-[0%] transition-all duration-300 group-hover:font-medium">
+            Where would you like to go
+          </span>
+        </button>
+      </div>
     </div>
   );
 }

@@ -23,12 +23,11 @@ const content = [
 
 export default function Why() {
   return (
-    <div className="w-full h-[calc(100vh-166px)] pt-[75px] mb-10 bg-gray-100">
+    <div className="w-full h-screen pt-[75px] mb-10">
       {/* Header */}
-      <div className="col-span-2 flex items-center justify-center w-[508px] h-[184px] ml-[216px] font-[Gully] font-normal text-[101px] leading-[80px] tracking-[0%]">
-  Why visit Raja Ampat?
-</div>
-
+      <div className="col-span-2 flex items-center justify-center w-[700px] ml-[216px] mb-[50px] mt-[190px] font-[Gully] font-normal text-white text-[101px] leading-[80px] tracking-[0%]">
+        Why visit Raja Ampat?
+      </div>
 
       {/* Content */}
       <div className="flex flex-col items-center">
@@ -36,8 +35,10 @@ export default function Why() {
           {content.map((item, idx) => (
             <div
               key={idx}
-              className={`flex items-center border border-gray-300 px-8 rounded-[20px] w-[880px] h-[262px] ${
-                idx % 2 === 0 ? 'ml-[64px] mr-1' : 'ml-1 mr-[64px]'
+              className={`flex items-center p-6 border border-white rounded-[20px] w-[880px] h-[262px] ${
+                idx % 2 === 0
+                  ? 'ml-[64px] mr-5 flex-row' // index 0 & 2
+                  : 'ml-5 mr-[64px] flex-row-reverse' // index 1 & 3
               }`}
             >
               <div className="w-[238px] h-[238px] rounded-full overflow-hidden border border-gray-300 flex-shrink-0">
@@ -49,7 +50,7 @@ export default function Why() {
                   className="object-cover w-full h-full"
                 />
               </div>
-              <p className="ml-8 text-black font-[Gully] font-light text-[40px] leading-[50px]">
+              <p className="ml-8 mr-8 text-white font-[Gully] font-light text-[40px] leading-[50px] text-left">
                 {item.text}
               </p>
             </div>

@@ -10,40 +10,40 @@ import "swiper/css/pagination";
 // Slide data array
 const slides = [
   {
-    title: "Piaynemo",
+    title: "Arborek",
     description:
-      "Famous for its breathtaking karst island formations and panoramic viewpoints over turquoise lagoons.",
-    background: "url('/images/piaynemo.jpg')",
-  },
-  {
-    title: "Wayag",
-    description:
-      "Iconic for its dramatic limestone islets and crystal-clear waters, often seen as the symbol of Raja Ampat.",
-    background: "url('/images/wayag.jpg')",
+      "A small island village offering rich cultural experiences and world-class snorkeling just off its jetty.",
+    background: "url('assets/img/topDestination/TopDestination_Photo1.png')",
   },
   {
     title: "Misool",
     description:
-      "A remote paradise known for its vibrant coral reefs, hidden lagoons, and marine biodiversity.",
-    background: "url('/images/misool.jpg')",
-  },
-  {
-    title: "Arborek",
-    description:
-      "A small island village offering rich cultural experiences and world-class snorkeling just off its jetty.",
-    background: "url('/images/arborek.jpg')",
-  },
-  {
-    title: "Teluk Kabui",
-    description:
-      "A serene bay surrounded by lush cliffs and dotted with unique rock formations and hidden coves.",
-    background: "url('/images/teluk-kabui.jpg')",
+      "A remote paradise known for its vibrant coral reefs, hidden lagoons, and extraordinary marine biodiversity.",
+    background: "url('assets/img/topDestination/TopDestination_Photo2.png')",
   },
   {
     title: "Pasir Timbul",
     description:
-      "A stunning sandbar that appears only during low tide, perfect for photos and peaceful walks in the sea.",
-    background: "url('/images/pasir-timbul.jpg')",
+      "A stunning white sandbar that appears only during low tide—perfect for serene walks and dreamy photo ops.",
+    background: "url('assets/img/topDestination/TopDestination_Photo3.png')",
+  },
+  {
+    title: "Piaynemo",
+    description:
+      "Famous for its breathtaking karst island formations and iconic viewpoints over turquoise lagoons.",
+    background: "url('assets/img/topDestination/TopDestination_Photo4.png')",
+  },
+  {
+    title: "Teluk Kabui",
+    description:
+      "A tranquil bay framed by lush cliffs and dotted with surreal rock formations and hidden coves.",
+    background: "url('assets/img/topDestination/TopDestination_Photo5.png')",
+  },
+  {
+    title: "Wayag",
+    description:
+      "Iconic for its dramatic limestone islets and clear aquamarine waters—often seen as the emblem of Raja Ampat.",
+    background: "url('assets/img/topDestination/TopDestination_Photo6.png')",
   },
 ];
 

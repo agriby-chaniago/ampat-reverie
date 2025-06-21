@@ -46,7 +46,8 @@ export default function GalleryVisual() {
 
   return (
     <div
-      className='pt-32 bg-cover bg-center min-h-screen'
+      id='gallery'
+      className='pt-32 bg-cover bg-center h-screen w-full'
       style={{ backgroundImage: "url('/assets/img/bg-gallery.jpg')" }}
     >
       <h2 className='text-center text-white text-4xl font-bold mb-10 tracking-wide'>

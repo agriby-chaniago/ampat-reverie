@@ -4,7 +4,10 @@ import RightLowerSection from "../components/RightLowerSection";
 
 export default function About() {
   return (
-    <div className='grid grid-cols-10 grid-rows-9 gap-0 w-full h-screen'>
+    <div
+      id='about'
+      className='grid grid-cols-10 grid-rows-9 gap-0 w-full h-screen'
+    >
       <CenterLargeArea />
       <LeftLowerSection />
       <RightLowerSection />

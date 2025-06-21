@@ -4,7 +4,10 @@ import RightLowerShort from "../components/RightLowerShort";
 
 export default function Ampat() {
   return (
-    <div className='grid grid-cols-10 grid-rows-10 gap-0 w-full h-screen'>
+    <div
+      id='ampat'
+      className='grid grid-cols-10 grid-rows-10 gap-0 w-full h-screen'
+    >
       <LeftLargeArea />
       <RightUpperTall />
       <RightLowerShort />

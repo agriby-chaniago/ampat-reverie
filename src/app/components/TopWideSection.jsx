@@ -1,22 +1,26 @@
+"use client";
+
 export default function TopWideSection() {
   return (
-    <div
-      className='fixed flex items-center justify-between px-6 py-4 bg-white shadow-lg'
-      style={{
-        width: "1044px",
-        height: "102px",
-        top: "64px",
-        left: "64px",
-        borderRadius: "20px",
-      }}
-    >
+    <div className='fixed top-16 left-16 w-[1044px] h-[102px] max-w-full bg-white shadow-lg rounded-2xl px-6 py-4 flex items-center justify-between z-50'>
       {/* Icon kiri */}
-      <div className='flex items-center'>
-        <img src='/icon.svg' alt='Icon' className='w-10 h-10' />
-      </div>
+      <button
+        onClick={() =>
+          document
+            .getElementById("ampat")
+            ?.scrollIntoView({ behavior: "smooth" })
+        }
+        className='flex items-center'
+      >
+        <img
+          src='/assets/icon.png'
+          alt='Icon'
+          className='w-50 h-50 cursor-pointer'
+        />
+      </button>
 
       {/* Menu kanan */}
-      <div className='hidden md:flex space-x-6 text-gray-800 font-medium text-lg'>
+      <nav className='hidden md:flex space-x-6 text-gray-800 font-medium text-lg'>
         <a href='#about' className='hover:text-blue-600 transition-colors'>
           About
         </a>
@@ -32,7 +36,7 @@ export default function TopWideSection() {
         <a href='#gallery' className='hover:text-blue-600 transition-colors'>
           Gallery
         </a>
-      </div>
+      </nav>
     </div>
   );
 }

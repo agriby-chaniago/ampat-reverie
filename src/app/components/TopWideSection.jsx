@@ -1,5 +1,8 @@
 "use client";
 
+// Import the UserMenu component
+import UserMenu from "./UserMenu";
+
 export default function TopWideSection() {
   return (
     <div className='fixed top-16 left-16 w-[1044px] h-[102px] max-w-full bg-white shadow-lg rounded-2xl px-6 py-4 flex items-center justify-between z-50'>
@@ -36,6 +39,8 @@ export default function TopWideSection() {
         <a href='#gallery' className='hover:text-blue-600 transition-colors'>
           Gallery
         </a>
+        {/* Add the UserMenu component */}
+        <UserMenu />
       </nav>
     </div>
   );

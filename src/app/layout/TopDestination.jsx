@@ -2,10 +2,11 @@
 
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/autoplay";
 
 // Slide data array
 const slides = [
@@ -13,37 +14,37 @@ const slides = [
     title: "Arborek",
     description:
       "A small island village offering rich cultural experiences and world-class snorkeling just off its jetty.",
-    background: "url('assets/img/topDestination/TopDestination_Photo1.png')",
+    background: "/assets/img/topDestination/TopDestination_Photo1.png",
   },
   {
     title: "Misool",
     description:
       "A remote paradise known for its vibrant coral reefs, hidden lagoons, and extraordinary marine biodiversity.",
-    background: "url('assets/img/topDestination/TopDestination_Photo2.png')",
+    background: "/assets/img/topDestination/TopDestination_Photo2.png",
   },
   {
     title: "Pasir Timbul",
     description:
       "A stunning white sandbar that appears only during low tide—perfect for serene walks and dreamy photo ops.",
-    background: "url('assets/img/topDestination/TopDestination_Photo3.png')",
+    background: "/assets/img/topDestination/TopDestination_Photo3.png",
   },
   {
     title: "Piaynemo",
     description:
       "Famous for its breathtaking karst island formations and iconic viewpoints over turquoise lagoons.",
-    background: "url('assets/img/topDestination/TopDestination_Photo4.png')",
+    background: "/assets/img/topDestination/TopDestination_Photo4.png",
   },
   {
     title: "Teluk Kabui",
     description:
       "A tranquil bay framed by lush cliffs and dotted with surreal rock formations and hidden coves.",
-    background: "url('assets/img/topDestination/TopDestination_Photo5.png')",
+    background: "/assets/img/topDestination/TopDestination_Photo5.png",
   },
   {
     title: "Wayag",
     description:
       "Iconic for its dramatic limestone islets and clear aquamarine waters—often seen as the emblem of Raja Ampat.",
-    background: "url('assets/img/topDestination/TopDestination_Photo6.png')",
+    background: "/assets/img/topDestination/TopDestination_Photo6.png",
   },
 ];
 
@@ -68,14 +69,18 @@ export default function TopDestination() {
       <Swiper
         direction='vertical'
         pagination={{ clickable: true }}
-        modules={[Pagination]}
+        modules={[Pagination, Autoplay]}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
         className='h-full w-full'
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
             <div
               className='h-full w-full bg-cover bg-center relative'
-              style={{ backgroundImage: slide.background }}
+              style={{ backgroundImage: `url(${slide.background})` }}
             >
               <SlideContent
                 title={slide.title}

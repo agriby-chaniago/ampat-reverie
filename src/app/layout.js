@@ -1,7 +1,8 @@
 import "./globals.css";
 import localFont from "next/font/local";
+import AuthProvider from "./providers/AuthProvider";
 
-// Gunakan font dari Google Fonts
+// Your existing font configuration
 const Gully = localFont({
   src: [
     {
@@ -36,7 +37,7 @@ export default function RootLayout({ children }) {
           antialiased min-h-screen bg-background text-foreground
         `}
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

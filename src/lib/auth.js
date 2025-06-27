@@ -22,3 +22,15 @@ export async function isAuthenticated() {
   const session = await getSession();
   return !!session;
 }
+
+export default async function AdminLayout({ children }) {
+  // Check if user is authenticated and is an admin
+  const session = await getServerSession();
+  
+  // Not authenticated or not admin
+  if (!session || session.user.email !== "admin@example.com") {
+    redirect("/auth/signin?error=AccessDenied");
+  }
+  
+  return <div>{children}</div>;
+}

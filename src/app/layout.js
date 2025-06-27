@@ -1,6 +1,7 @@
 import "./globals.css";
 import localFont from "next/font/local";
 import AuthProvider from "./providers/AuthProvider";
+import FeedbackPopup from "./components/feedback/FeedbackPopup";
 
 // Your existing font configuration
 const Gully = localFont({
@@ -37,7 +38,10 @@ export default function RootLayout({ children }) {
           antialiased min-h-screen bg-background text-foreground
         `}
       >
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <FeedbackPopup />
+        </AuthProvider>
       </body>
     </html>
   );

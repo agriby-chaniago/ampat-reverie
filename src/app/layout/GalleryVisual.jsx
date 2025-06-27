@@ -20,23 +20,23 @@ export default function GalleryVisual() {
     { src: "/assets/img/gallery/GalleryVisual_Photo6.jpg", thumb: "/assets/img/gallery/GalleryVisual_Photo6.jpg" },
   ];
 
-  // Tailwind classes untuk ukuran dan posisi
+  // Updated position values with increased top values
   const tailwindPositions = [
-    "w-[492px] h-[328px] left-[64px] top-0",       // Foto 1
-    "w-[347px] h-[616px] left-[588px] top-0",      // Foto 2
-    "w-[414px] h-[322px] left-[967px] top-0",      // Foto 3
-    "w-[490px] h-[256px] left-[64px] top-[360px]", // Foto 4
-    "w-[414px] h-[264px] left-[967px] top-[360px]",// Foto 5
-    "w-[444px] h-[616px] left-[1412px] top-0",     // Foto 6
+    "w-[492px] h-[328px] left-[64px] top-[180px]",      // Foto 1 (moved down)
+    "w-[347px] h-[616px] left-[588px] top-[180px]",     // Foto 2 (moved down)
+    "w-[414px] h-[322px] left-[967px] top-[180px]",     // Foto 3 (moved down)
+    "w-[490px] h-[256px] left-[64px] top-[540px]",      // Foto 4 (moved down)
+    "w-[414px] h-[264px] left-[967px] top-[540px]",     // Foto 5 (moved down)
+    "w-[444px] h-[616px] left-[1412px] top-[180px]",    // Foto 6 (moved down)
   ];
 
   return (
     <div
       id="gallery"
-      className="pt-32 relative h-[1000px] w-full bg-cover bg-center"
+      className="pt-48 relative h-[1080px] w-full bg-cover bg-center" // Increased top padding
       style={{ backgroundImage: "url('/assets/img/bg-gallery.jpg')" }}
     >
-      <h2 className="text-center text-white text-4xl font-bold mb-10 tracking-wide">
+      <h2 className="absolute left-[100px] top-[236px] w-[1000px] h-[100px] text-center text-white font-[Gully] font-normal text-[80px] leading-[100px] tracking-[0.05em]">
         Gallery Visual
       </h2>
 

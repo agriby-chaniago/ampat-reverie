@@ -12,56 +12,42 @@ export default function GalleryVisual() {
   const galleryRef = useRef(null);
 
   const dynamicEl = [
-    {
-      src: "/assets/img/GalleryVisual_Photo1.jpg",
-      thumb: "/assets/img/GalleryVisual_Photo1.jpg",
-      subHtml: `<h4>Gugusan pasir dari atas</h4><p>Keindahan bentuk alami pasir laut dari pandangan drone</p>`,
-    },
-    {
-      src: "/assets/img/GalleryVisual_Photo2.jpg",
-      thumb: "/assets/img/GalleryVisual_Photo2.jpg",
-      subHtml: `<h4>Pulau-pulau karst tropis</h4><p>Panorama gugusan pulau kecil yang hijau dan eksotis</p>`,
-    },
-    {
-      src: "/assets/img/GalleryVisual_Photo3.jpg",
-      thumb: "/assets/img/GalleryVisual_Photo3.jpg",
-      subHtml: `<h4>Teluk sempit berair jernih</h4><p>Air berwarna turquoise diapit tebing hijau</p>`,
-    },
-    {
-      src: "/assets/img/GalleryVisual_Photo4.jpg",
-      thumb: "/assets/img/GalleryVisual_Photo4.jpg",
-      subHtml: `<h4>Pemandangan dari atas laguna</h4><p>Panorama air biru kehijauan dan pulau karst dari ketinggian</p>`,
-    },
-    {
-      src: "/assets/img/GalleryVisual_Photo5.jpg",
-      thumb: "/assets/img/GalleryVisual_Photo5.jpg",
-      subHtml: `<h4>Karang dan kehidupan laut</h4><p>Snorkeling dan terumbu karang berwarna-warni</p>`,
-    },
-    {
-      src: "/assets/img/GalleryVisual_Photo6.jpg",
-      thumb: "/assets/img/GalleryVisual_Photo6.jpg",
-      subHtml: `<h4>Laguna tersembunyi</h4><p>Spot tersembunyi yang tenang di balik tebing</p>`,
-    },
+    { src: "/assets/img/gallery/GalleryVisual_Photo1.jpg", thumb: "/assets/img/gallery/GalleryVisual_Photo1.jpg" },
+    { src: "/assets/img/gallery/GalleryVisual_Photo2.jpg", thumb: "/assets/img/gallery/GalleryVisual_Photo2.jpg" },
+    { src: "/assets/img/gallery/GalleryVisual_Photo3.jpg", thumb: "/assets/img/gallery/GalleryVisual_Photo3.jpg" },
+    { src: "/assets/img/gallery/GalleryVisual_Photo4.jpg", thumb: "/assets/img/gallery/GalleryVisual_Photo4.jpg" },
+    { src: "/assets/img/gallery/GalleryVisual_Photo5.jpg", thumb: "/assets/img/gallery/GalleryVisual_Photo5.jpg" },
+    { src: "/assets/img/gallery/GalleryVisual_Photo6.jpg", thumb: "/assets/img/gallery/GalleryVisual_Photo6.jpg" },
+  ];
+
+  // Tailwind classes untuk ukuran dan posisi
+  const tailwindPositions = [
+    "w-[492px] h-[328px] left-[64px] top-0",       // Foto 1
+    "w-[347px] h-[616px] left-[588px] top-0",      // Foto 2
+    "w-[414px] h-[322px] left-[967px] top-0",      // Foto 3
+    "w-[490px] h-[256px] left-[64px] top-[360px]", // Foto 4
+    "w-[414px] h-[264px] left-[967px] top-[360px]",// Foto 5
+    "w-[444px] h-[616px] left-[1412px] top-0",     // Foto 6
   ];
 
   return (
     <div
-      id='gallery'
-      className='pt-32 bg-cover bg-center h-screen w-full'
+      id="gallery"
+      className="pt-32 relative h-[1000px] w-full bg-cover bg-center"
       style={{ backgroundImage: "url('/assets/img/bg-gallery.jpg')" }}
     >
-      <h2 className='text-center text-white text-4xl font-bold mb-10 tracking-wide'>
+      <h2 className="text-center text-white text-4xl font-bold mb-10 tracking-wide">
         Gallery Visual
       </h2>
 
-      <div className='max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4'>
+      <div className="relative max-w-[1920px] mx-auto">
         {dynamicEl.map((img, idx) => (
           <div
             key={idx}
-            className='rounded-xl overflow-hidden shadow-md cursor-pointer hover:scale-105 transition'
+            className={`absolute border border-white rounded-[20px] overflow-hidden shadow-md cursor-pointer hover:scale-105 transition ${tailwindPositions[idx]}`}
             onClick={() => galleryRef.current?.openGallery(idx)}
           >
-            <img src={img.thumb} alt='' className='w-full h-60 object-cover' />
+            <img src={img.thumb} alt="" className="w-full h-full object-cover" />
           </div>
         ))}
       </div>
@@ -71,7 +57,7 @@ export default function GalleryVisual() {
         dynamic
         dynamicEl={dynamicEl}
         plugins={[lgThumbnail, lgZoom]}
-        mode='lg-fade'
+        mode="lg-fade"
       />
     </div>
   );

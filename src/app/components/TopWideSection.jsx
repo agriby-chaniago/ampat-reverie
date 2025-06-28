@@ -1,11 +1,29 @@
 "use client";
-
-// Import the UserMenu component
+import { motion } from "framer-motion";
 import UserMenu from "./UserMenu";
 
 export default function TopWideSection() {
   return (
-    <div className='fixed top-16 left-16 w-[1044px] h-[102px] max-w-full bg-white shadow-lg rounded-2xl px-6 py-4 flex items-center justify-between z-50'>
+    <motion.div
+      initial={{ opacity: 0, y: -32 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className='
+        flex
+        items-center
+        justify-between
+        w-[1044px]
+        h-[102px]
+        max-w-full
+        bg-white
+        shadow-lg
+        rounded-2xl
+        px-6
+        py-4
+        mt-[64px]
+        z-50
+      '
+    >
       {/* Icon kiri */}
       <button
         onClick={() =>
@@ -18,7 +36,7 @@ export default function TopWideSection() {
         <img
           src='/assets/icon.png'
           alt='Icon'
-          className='w-50 h-50 cursor-pointer'
+          className='w-[175px] h-[175px] cursor-pointer'
         />
       </button>
 
@@ -39,9 +57,8 @@ export default function TopWideSection() {
         <a href='#gallery' className='hover:text-blue-600 transition-colors'>
           Gallery
         </a>
-        {/* Add the UserMenu component */}
         <UserMenu />
       </nav>
-    </div>
+    </motion.div>
   );
 }

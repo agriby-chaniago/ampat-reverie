@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardContent } from "@/app/components/ui/card";
+import { Input } from "@/app/components/ui/input";
+import { Button } from "@/app/components/ui/button";
 
 export default function SignUp() {
   const router = useRouter();
@@ -20,7 +20,8 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
-  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword((prev) => !prev);
+  const toggleConfirmPasswordVisibility = () =>
+    setShowConfirmPassword((prev) => !prev);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,30 +57,33 @@ export default function SignUp() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url('/assets/bg.png')] px-4">
-      <div className="w-full max-w-md">
-        <Card className="bg-white/80 backdrop-blur-md border-white shadow-xl rounded-2xl">
+      <div className='w-full max-w-md'>
+        <Card className='bg-white/80 backdrop-blur-md border-white shadow-xl rounded-2xl'>
           <CardHeader>
-            <h2 className="text-3xl font-bold text-center text-[#102437] font-[Gully]">
+            <h2 className='text-3xl font-bold text-center text-[#102437] font-[Gully]'>
               Create an Account
             </h2>
           </CardHeader>
 
           <CardContent>
             {error && (
-              <div className="bg-red-100 text-red-700 border border-red-400 px-4 py-2 rounded mb-4 text-sm">
+              <div className='bg-red-100 text-red-700 border border-red-400 px-4 py-2 rounded mb-4 text-sm'>
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className='space-y-5'>
               {/* Name */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor='name'
+                  className='block text-sm font-medium text-gray-700 mb-1'
+                >
                   Full Name
                 </label>
                 <Input
-                  id="name"
-                  type="text"
+                  id='name'
+                  type='text'
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -88,12 +92,15 @@ export default function SignUp() {
 
               {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor='email'
+                  className='block text-sm font-medium text-gray-700 mb-1'
+                >
                   Email
                 </label>
                 <Input
-                  id="email"
-                  type="email"
+                  id='email'
+                  type='email'
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -102,12 +109,15 @@ export default function SignUp() {
 
               {/* Password */}
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor='password'
+                  className='block text-sm font-medium text-gray-700 mb-1'
+                >
                   Password
                 </label>
-                <div className="relative">
+                <div className='relative'>
                   <Input
-                    id="password"
+                    id='password'
                     type={showPassword ? "text" : "password"}
                     required
                     minLength={8}
@@ -115,24 +125,33 @@ export default function SignUp() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <button
-                    type="button"
+                    type='button'
                     onClick={togglePasswordVisibility}
-                    className="absolute right-3 inset-y-0 flex items-center text-gray-600"
+                    className='absolute right-3 inset-y-0 flex items-center text-gray-600'
                   >
-                    {showPassword ? <EyeOffIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+                    {showPassword ? (
+                      <EyeOffIcon className='w-4 h-4' />
+                    ) : (
+                      <EyeIcon className='w-4 h-4' />
+                    )}
                   </button>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters</p>
+                <p className='text-xs text-gray-500 mt-1'>
+                  Must be at least 8 characters
+                </p>
               </div>
 
               {/* Confirm Password */}
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor='confirmPassword'
+                  className='block text-sm font-medium text-gray-700 mb-1'
+                >
                   Confirm Password
                 </label>
-                <div className="relative">
+                <div className='relative'>
                   <Input
-                    id="confirmPassword"
+                    id='confirmPassword'
                     type={showConfirmPassword ? "text" : "password"}
                     required
                     minLength={8}
@@ -140,28 +159,35 @@ export default function SignUp() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                   <button
-                    type="button"
+                    type='button'
                     onClick={toggleConfirmPasswordVisibility}
-                    className="absolute right-3 inset-y-0 flex items-center text-gray-600"
+                    className='absolute right-3 inset-y-0 flex items-center text-gray-600'
                   >
-                    {showConfirmPassword ? <EyeOffIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+                    {showConfirmPassword ? (
+                      <EyeOffIcon className='w-4 h-4' />
+                    ) : (
+                      <EyeIcon className='w-4 h-4' />
+                    )}
                   </button>
                 </div>
               </div>
 
               {/* Submit */}
               <Button
-                type="submit"
+                type='submit'
                 disabled={isLoading}
-                className="w-full font-[Gully] bg-[#102437] hover:bg-[#1a3b5c] text-white"
+                className='w-full font-[Gully] bg-[#102437] hover:bg-[#1a3b5c] text-white'
               >
                 {isLoading ? "Creating Account..." : "Sign Up"}
               </Button>
             </form>
 
-            <p className="text-center text-sm text-gray-600 mt-6">
+            <p className='text-center text-sm text-gray-600 mt-6'>
               Already have an account?{" "}
-              <Link href="/auth/signin" className="text-blue-600 hover:underline font-medium">
+              <Link
+                href='/auth/signin'
+                className='text-blue-600 hover:underline font-medium'
+              >
                 Sign in
               </Link>
             </p>

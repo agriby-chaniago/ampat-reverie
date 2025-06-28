@@ -17,7 +17,7 @@ export default function Home() {
       <Why />
       <GalleryVisual />
       <Footer />
-      <RealFooter />
+      {/* <RealFooter /> */}
     </main>
   );
 }

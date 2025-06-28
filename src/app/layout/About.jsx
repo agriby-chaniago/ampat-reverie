@@ -4,13 +4,18 @@ import RightLowerSection from "../components/RightLowerSection";
 
 export default function About() {
   return (
-    <div
+    <div 
       id='about'
-      className='grid grid-cols-10 grid-rows-9 gap-0 w-full h-screen'
+      className='w-full flex flex-col gap-2 py-34'
     >
+      {/* Top row (similar to flex in Navbar but as a single component) */}
       <CenterLargeArea />
-      <LeftLowerSection />
-      <RightLowerSection />
+      
+      {/* Bottom row (similar to Navbar structure: left and right) */}
+      <div className='w-full flex flex-row items-start justify-evenly'>
+        <LeftLowerSection />
+        <RightLowerSection />
+      </div>
     </div>
   );
 }

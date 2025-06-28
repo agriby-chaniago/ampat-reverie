@@ -1,8 +1,26 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { Globe, Sailboat } from 'lucide-react';
 
 export default function LeftLowerSection() {
   return (
-    <div className="absolute top-[1782px] left-[64px] w-[1044px] h-[318px] bg-white rounded-[20px] flex justify-between px-10 pt-10">
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="
+        w-[1044px]
+        h-[318px]
+        bg-white
+        rounded-[20px]
+        flex 
+        justify-between 
+        px-10 
+        pt-10
+        shadow-lg
+      "
+    >
       {/* Left Content Group */}
       <div className="flex flex-col gap-4 max-w-[45%]">
         <div className="flex items-center gap-2">
@@ -32,6 +50,6 @@ export default function LeftLowerSection() {
           Home to 75% of all known coral species and over 1,700 fish species, making it the most biodiverse marine region on the planet.
         </h3>
       </div>
-    </div>
+    </motion.div>
   );
 }

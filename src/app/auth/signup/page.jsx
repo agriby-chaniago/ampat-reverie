@@ -56,117 +56,129 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-[url('/assets/bg.png')] px-4">
-      <div className='w-full max-w-md'>
-        <Card className='bg-white/80 backdrop-blur-md border-white shadow-xl rounded-2xl'>
-          <CardHeader>
-            <h2 className='text-3xl font-bold text-center text-[#102437] font-[Gully]'>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-[url('/assets/bg.png')] px-4 py-8">
+      <div className="w-full max-w-[90%] sm:max-w-[450px] flex flex-col">
+        <Card className="bg-white/80 backdrop-blur-md border-white shadow-xl rounded-2xl">
+          <CardHeader className="pb-2">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center text-[#102437] font-[Gully]">
               Create an Account
             </h2>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className="flex flex-col gap-4">
             {error && (
-              <div className='bg-red-100 text-red-700 border border-red-400 px-4 py-2 rounded mb-4 text-sm'>
-                {error}
+              <div className="bg-red-100 text-red-700 border border-red-400 px-4 py-2 rounded text-sm flex items-center">
+                <span>{error}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className='space-y-5'>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               {/* Name */}
-              <div>
+              <div className="flex flex-col">
                 <label
-                  htmlFor='name'
-                  className='block text-sm font-medium text-gray-700 mb-1'
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Full Name
                 </label>
                 <Input
-                  id='name'
-                  type='text'
+                  id="name"
+                  type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  className="h-10"
+                  placeholder="John Doe"
                 />
               </div>
 
               {/* Email */}
-              <div>
+              <div className="flex flex-col">
                 <label
-                  htmlFor='email'
-                  className='block text-sm font-medium text-gray-700 mb-1'
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Email
                 </label>
                 <Input
-                  id='email'
-                  type='email'
+                  id="email"
+                  type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="h-10"
+                  placeholder="your@email.com"
                 />
               </div>
 
               {/* Password */}
-              <div>
+              <div className="flex flex-col">
                 <label
-                  htmlFor='password'
-                  className='block text-sm font-medium text-gray-700 mb-1'
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Password
                 </label>
-                <div className='relative'>
+                <div className="relative flex items-center">
                   <Input
-                    id='password'
+                    id="password"
                     type={showPassword ? "text" : "password"}
                     required
                     minLength={8}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="h-10 pr-10"
+                    placeholder="••••••••"
                   />
                   <button
-                    type='button'
+                    type="button"
                     onClick={togglePasswordVisibility}
-                    className='absolute right-3 inset-y-0 flex items-center text-gray-600'
+                    className="absolute right-3 text-gray-600 focus:outline-none"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
-                      <EyeOffIcon className='w-4 h-4' />
+                      <EyeOffIcon className="w-4 h-4" />
                     ) : (
-                      <EyeIcon className='w-4 h-4' />
+                      <EyeIcon className="w-4 h-4" />
                     )}
                   </button>
                 </div>
-                <p className='text-xs text-gray-500 mt-1'>
+                <p className="text-xs text-gray-500 mt-1">
                   Must be at least 8 characters
                 </p>
               </div>
 
               {/* Confirm Password */}
-              <div>
+              <div className="flex flex-col">
                 <label
-                  htmlFor='confirmPassword'
-                  className='block text-sm font-medium text-gray-700 mb-1'
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Confirm Password
                 </label>
-                <div className='relative'>
+                <div className="relative flex items-center">
                   <Input
-                    id='confirmPassword'
+                    id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     required
                     minLength={8}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="h-10 pr-10"
+                    placeholder="••••••••"
                   />
                   <button
-                    type='button'
+                    type="button"
                     onClick={toggleConfirmPasswordVisibility}
-                    className='absolute right-3 inset-y-0 flex items-center text-gray-600'
+                    className="absolute right-3 text-gray-600 focus:outline-none"
+                    aria-label={
+                      showConfirmPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showConfirmPassword ? (
-                      <EyeOffIcon className='w-4 h-4' />
+                      <EyeOffIcon className="w-4 h-4" />
                     ) : (
-                      <EyeIcon className='w-4 h-4' />
+                      <EyeIcon className="w-4 h-4" />
                     )}
                   </button>
                 </div>
@@ -174,19 +186,19 @@ export default function SignUp() {
 
               {/* Submit */}
               <Button
-                type='submit'
+                type="submit"
                 disabled={isLoading}
-                className='w-full font-[Gully] bg-[#102437] hover:bg-[#1a3b5c] text-white'
+                className="w-full h-11 mt-2 font-[Gully] bg-[#102437] hover:bg-[#1a3b5c] text-white"
               >
                 {isLoading ? "Creating Account..." : "Sign Up"}
               </Button>
             </form>
 
-            <p className='text-center text-sm text-gray-600 mt-6'>
+            <p className="text-center text-sm text-gray-600 mt-2">
               Already have an account?{" "}
               <Link
-                href='/auth/signin'
-                className='text-blue-600 hover:underline font-medium'
+                href="/auth/signin"
+                className="text-blue-600 hover:underline font-medium"
               >
                 Sign in
               </Link>

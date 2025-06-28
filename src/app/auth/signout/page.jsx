@@ -20,14 +20,14 @@ export default function SignOut() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/assets/bg.png')" }}>
-      <div className="w-full max-w-md">
-        <div className="bg-white/80 backdrop-blur-md p-8 rounded-[20px] border border-white shadow-xl">
-          <div className="flex flex-col items-center mb-6">
-            <div className="bg-red-100 p-3 rounded-full">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-[url('/assets/bg.png')] px-4 py-8">
+      <div className="w-full max-w-[90%] sm:max-w-md flex flex-col">
+        <div className="bg-white/80 backdrop-blur-md p-6 sm:p-8 rounded-[20px] border border-white shadow-xl">
+          <div className="flex flex-col items-center gap-4 mb-6">
+            <div className="bg-red-100 p-3 rounded-full flex items-center justify-center">
               <LogOutIcon size={24} className="text-red-600" />
             </div>
-            <h2 className="text-3xl font-[Gully] font-bold mt-4 text-center text-[#102437]">
+            <h2 className="text-2xl sm:text-3xl font-[Gully] font-bold text-center text-[#102437]">
               Sign Out
             </h2>
           </div>
@@ -36,10 +36,10 @@ export default function SignOut() {
             Are you sure you want to sign out of your account?
           </p>
           
-          <div className="flex space-x-4">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-4">
             <button
               onClick={handleCancel}
-              className="flex-1 py-3 font-[Gully] bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-300 focus:outline-none"
+              className="flex-1 py-3 px-4 font-[Gully] bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-300 focus:outline-none"
             >
               Cancel
             </button>
@@ -47,7 +47,7 @@ export default function SignOut() {
             <button
               onClick={handleSignOut}
               disabled={isLoading}
-              className="flex-1 py-3 font-[Gully] bg-[#102437] text-white rounded-md hover:bg-[#1a3b5c] transition duration-300 focus:outline-none"
+              className="flex-1 py-3 px-4 font-[Gully] bg-[#102437] text-white rounded-md hover:bg-[#1a3b5c] transition duration-300 focus:outline-none"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">

@@ -1,6 +1,33 @@
+"use client";
+import { motion } from "framer-motion";
+
 export default function CenterLargeArea() {
   return (
-    <div className='absolute top-[1278px] left-[64px] w-[1792px] h-[472px] flex overflow-hidden rounded-[20px] border border-white backdrop-blur-xs px-[60px] py-[40px]'>
+    <motion.div
+      initial={{ opacity: 0, y: 0 }} // Changed from y: -20 to y: 0 to prevent off-screen animation
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="
+        flex
+        w-[1816px]
+        h-[472px]
+        max-w-full
+        mx-auto
+        bg-transparent
+        backdrop-blur-xs
+        rounded-[20px]
+        px-[60px]
+        py-[40px]
+        mt-[64px]
+        mb-[32px]
+        border
+        border-white
+        overflow-hidden
+        shadow-md
+        z-10
+        relative
+      "
+    >
       {/* Left Side */}
       <div className='flex-1 flex flex-col justify-start gap-2 pr-8'>
         <h2 className='text-white font-[Gully] font-normal text-[60px] leading-[1.05]'>
@@ -24,6 +51,6 @@ export default function CenterLargeArea() {
           meets ancient culture
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 }

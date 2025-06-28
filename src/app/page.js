@@ -5,19 +5,35 @@ import TopDestination from "@/app/layout/TopDestination";
 import Why from "@/app/layout/Why";
 import GalleryVisual from "@/app/layout/GalleryVisual";
 import Footer from "@/app/layout/Footer";
-import RealFooter from "@/app/layout/RealFooter";
 
 export default function Home() {
   return (
-    <main className='flex flex-col items-center justify-center min-h-screen'>
+    <main className='flex flex-col w-full'>
       <Navbar />
       <Ampat />
       <About />
       <TopDestination />
       <Why />
-      <GalleryVisual />
-      <Footer />
-      {/* <RealFooter /> */}
+
+      {/* Background wrapper untuk Gallery+Footer */}
+      <div
+        className='relative w-full'
+        style={{
+          backgroundImage: "url('/assets/bgGalleryFooter.png')",
+          backgroundSize: "100% 2160px",
+          backgroundPosition: "top",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        {/* Overlay jika mau */}
+        <div className='absolute inset-0 bg-black/40 z-0' />
+
+        {/* Content */}
+        <div className='relative z-10 flex flex-col'>
+          <GalleryVisual />
+          <Footer />
+        </div>
+      </div>
     </main>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
-import { Menu, Bell } from "lucide-react";
+import { Menu } from "lucide-react";
 import { motion } from "framer-motion";
+import UserMenu from "./UserMenu";
 
 export default function TopNarrowSection() {
   return (
@@ -22,12 +23,11 @@ export default function TopNarrowSection() {
         z-40
       '
     >
-      <a href='#why-visit' className='hover:text-blue-600 transition-colors'>
+      <a href='#why-visit' className='hover:text-[#107773] transition-colors'>
         <Menu size={28} />
       </a>
-      <a href='#why-visit' className='hover:text-blue-600 transition-colors'>
-        <Bell size={28} />
-      </a>
+
+      <UserMenu />
     </motion.div>
   );
 }

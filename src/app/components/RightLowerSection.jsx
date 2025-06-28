@@ -16,23 +16,23 @@ export default function RightLowerSection() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
-      className="
+      className='
         w-[716px]
-        h-[318px]
+        h-[300px]
         rounded-[20px]
         p-6
         backdrop-blur-xs
         border
         border-white
         shadow-md
-      "
+      '
     >
-      <Card className="bg-transparent border-none shadow-none h-full">
-        <CardContent className="flex flex-col justify-between h-full text-white font-[Gully] text-[24px]">
+      <Card className='bg-transparent border-none shadow-none h-full'>
+        <CardContent className='flex flex-col justify-between h-full text-white font-[Gully] text-[24px]'>
           {stats.map((item, index) => (
-            <div key={index} className="flex justify-between items-center">
-              <span className="font-bold">{item.label}</span>
-              <span className="font-bold">{item.value}</span>
+            <div key={index} className='flex justify-between items-center'>
+              <span className='font-bold'>{item.label}</span>
+              <span className='font-bold'>{item.value}</span>
             </div>
           ))}
         </CardContent>

@@ -1,21 +1,80 @@
+'use client';
+
 import CenterLargeArea from "../components/CenterLargeArea";
 import LeftLowerSection from "../components/LeftLowerSection";
 import RightLowerSection from "../components/RightLowerSection";
+import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Navigation } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 export default function About() {
+  const [deviceSize, setDeviceSize] = useState("desktop");
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setDeviceSize("mobile");
+      } else if (width < 1024) {
+        setDeviceSize("tablet");
+      } else {
+        setDeviceSize("desktop");
+      }
+    };
+
+    // Set initial value
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = deviceSize === "mobile";
+
   return (
     <div 
       id='about'
-      className='w-full flex flex-col gap-2 py-34'
+      className='w-full flex flex-col gap-2 sm:gap-4 lg:gap-6 py-16 sm:py-24 lg:py-34 px-4 sm:px-6 relative'
     >
-      {/* Top row (similar to flex in Navbar but as a single component) */}
-      <CenterLargeArea />
-      
-      {/* Bottom row (similar to Navbar structure: left and right) */}
-      <div className='w-full flex flex-row items-start justify-evenly'>
-        <LeftLowerSection />
-        <RightLowerSection />
-      </div>
+      {/* Mobile Swiper view */}
+      {isMobile ? (
+        <div className="w-full">
+          <Swiper
+            modules={[Pagination, Navigation]}
+            pagination={{
+              clickable: true,
+              dynamicBullets: true,
+            }}
+            navigation={true}
+            spaceBetween={20}
+            slidesPerView={1}
+            className="about-swiper"
+          >
+            <SwiperSlide>
+              <CenterLargeArea deviceSize={deviceSize} />
+            </SwiperSlide>
+            <SwiperSlide>
+              <LeftLowerSection deviceSize={deviceSize} />
+            </SwiperSlide>
+            <SwiperSlide>
+              <RightLowerSection deviceSize={deviceSize} />
+            </SwiperSlide>
+          </Swiper>
+        </div>
+      ) : (
+        /* Desktop/Tablet regular view */
+        <>
+          <CenterLargeArea deviceSize={deviceSize} />
+          <div className='w-full flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 sm:gap-8 lg:gap-10'>
+            <LeftLowerSection deviceSize={deviceSize} />
+            <RightLowerSection deviceSize={deviceSize} />
+          </div>
+        </>
+      )}
     </div>
   );
 }

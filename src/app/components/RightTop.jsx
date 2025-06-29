@@ -12,27 +12,27 @@ export default function RightTop() {
         flex
         flex-col
         justify-center
-        gap-6
-        w-[716px]
-        h-[320px]
+        gap-3 sm:gap-4 lg:gap-6
+        w-full lg:w-[716px]
+        h-auto min-h-[200px] sm:min-h-[250px] lg:h-[320px]
         bg-gradient-to-b
         from-white/0
         to-white
         shadow
-        rounded-[20px]
-        px-8
-        py-8
+        rounded-[12px] sm:rounded-[16px] lg:rounded-[20px]
+        px-4 sm:px-6 lg:px-8
+        py-5 sm:py-6 lg:py-8
         border
         border-white
       '
     >
-      {/* Kontainer isi */}
-      <div className='flex flex-col gap-4 max-w-[500px]'>
+      {/* Content container with responsive typography */}
+      <div className='flex flex-col gap-2 sm:gap-3 lg:gap-4 max-w-full sm:max-w-[500px]'>
         <h2
           className='
             font-[Gully]
             font-semibold
-            text-4xl
+            text-2xl sm:text-3xl md:text-3xl lg:text-4xl
             leading-tight
             tracking-tight
             text-[#0d1c2c]
@@ -48,7 +48,7 @@ export default function RightTop() {
           className='
             font-[Gully]
             font-light
-            text-base
+            text-sm sm:text-base lg:text-base
             leading-normal
             tracking-tight
             text-[#102437]
@@ -57,7 +57,7 @@ export default function RightTop() {
           '
         >
           Raja Ampat isn't just a place, it's a feeling.
-          <br />
+          <br className="hidden sm:block" />
           Drift away where the ocean whispers and time stands still.
         </p>
       </div>

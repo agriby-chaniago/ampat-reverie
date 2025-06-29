@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay, Navigation } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
+import "swiper/css/navigation";
 
 // Slide data array
 const slides = [
@@ -54,22 +55,62 @@ const slides = [
   },
 ];
 
-// Reusable Slide Content Component
-const SlideContent = ({ title, description }) => (
-  <div className='relative h-full w-full flex flex-col justify-end pb-24 px-16 bg-black/40'>
-    <h2 className='text-white font-[Gully] font-normal text-[100px] leading-[100px] max-w-[800px] mb-[30px]'>
-      {title}
-    </h2>
-    <p className='text-white font-[Gully] font-light mt-[15px] text-[45px] leading-[55px] max-w-[756px]'>
-      {description}
-    </p>
-  </div>
-);
+// Responsive Slide Content Component
+const SlideContent = ({ title, description, isMobile, isTablet }) => {
+  // For desktop (full screen)
+  if (!isMobile && !isTablet) {
+    return (
+      <div className='relative h-full w-full flex flex-col justify-end pb-24 px-16 bg-black/40'>
+        <h2 className='text-white font-[Gully] font-normal text-[100px] leading-[100px] max-w-[800px] mb-[30px]'>
+          {title}
+        </h2>
+        <p className='text-white font-[Gully] font-light mt-[15px] text-[45px] leading-[55px] max-w-[756px]'>
+          {description}
+        </p>
+      </div>
+    );
+  }
+
+  // For mobile and tablet (card layout)
+  return (
+    <div className='absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-[2px] p-4 sm:p-6'>
+      <h2 className='text-white font-[Gully] font-normal text-2xl sm:text-3xl leading-tight mb-1 sm:mb-2'>
+        {title}
+      </h2>
+      <p className='text-white font-[Gully] font-light text-sm sm:text-base leading-snug line-clamp-2 sm:line-clamp-3'>
+        {description}
+      </p>
+    </div>
+  );
+};
 
 export default function TopDestination() {
   const swiperRef = useRef(null);
+  const [deviceSize, setDeviceSize] = useState("desktop");
 
-  // Simplified direct navigation function
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setDeviceSize("mobile");
+      } else if (width < 1024) {
+        setDeviceSize("tablet");
+      } else {
+        setDeviceSize("desktop");
+      }
+    };
+
+    // Set initial value
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = deviceSize === "mobile";
+  const isTablet = deviceSize === "tablet";
+  const isSmallDevice = isMobile || isTablet;
+
+  // Navigation function
   const navigateToSlide = (slideId) => {
     if (!swiperRef.current || !swiperRef.current.swiper) {
       console.error("Swiper not initialized yet!");
@@ -99,31 +140,80 @@ export default function TopDestination() {
   return (
     <div
       id='top-destination'
-      className='h-screen w-full col-start-1 col-end-5 row-start-1 row-end-4'
+      className={`${isSmallDevice ? 'min-h-[80vh] py-8 sm:py-12' : 'h-screen'} w-full`}
     >
-    
+      {isSmallDevice && (
+        <div className="px-4 sm:px-6 mb-6 sm:mb-8">
+          <h2 className="text-white font-[Gully] font-normal text-3xl sm:text-4xl mb-2">
+            Top Destination
+          </h2>
+          <p className="text-white font-[Gully] font-light text-lg sm:text-xl">
+            Explore the best of Raja Ampat
+          </p>
+        </div>
+      )}
+
       <Swiper
         ref={swiperRef}
-        direction='vertical'
-        pagination={{ clickable: true }}
-        modules={[Pagination, Autoplay]}
+        direction={isSmallDevice ? 'horizontal' : 'vertical'}
+        pagination={{
+          clickable: true,
+          dynamicBullets: isSmallDevice,
+        }}
+        navigation={isTablet}
+        modules={[Pagination, Autoplay, Navigation]}
         autoplay={{
           delay: 5000,
           disableOnInteraction: false,
         }}
-        className='h-full w-full swiper-container' // Added class for direct selection
+        breakpoints={isSmallDevice ? {
+          // Mobile breakpoints
+          0: {
+            slidesPerView: 1.2,
+            spaceBetween: 16,
+            centeredSlides: false,
+          },
+          640: {
+            slidesPerView: 2.2,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 2.5,
+            spaceBetween: 24,
+          }
+        } : {}}
+        className={`${isSmallDevice ? 'destination-card-swiper px-4 sm:px-6' : 'h-full w-full swiper-container'}`}
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={index} id={`slide-${slide.id}`}>
-            <div
-              className='h-full w-full bg-cover bg-center relative'
-              style={{ backgroundImage: `url(${slide.background})` }}
-            >
-              <SlideContent
-                title={slide.title}
-                description={slide.description}
-              />
-            </div>
+            {isSmallDevice ? (
+              // Card layout for mobile and tablet
+              <div
+                className="h-[260px] sm:h-[320px] w-full bg-cover bg-center rounded-xl overflow-hidden relative shadow-lg"
+                style={{ backgroundImage: `url(${slide.background})` }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <SlideContent
+                  title={slide.title}
+                  description={slide.description}
+                  isMobile={isMobile}
+                  isTablet={isTablet}
+                />
+              </div>
+            ) : (
+              // Full screen layout for desktop
+              <div
+                className='h-full w-full bg-cover bg-center relative'
+                style={{ backgroundImage: `url(${slide.background})` }}
+              >
+                <SlideContent
+                  title={slide.title}
+                  description={slide.description}
+                  isMobile={isMobile}
+                  isTablet={isTablet}
+                />
+              </div>
+            )}
           </SwiperSlide>
         ))}
       </Swiper>

@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Footer() {
   return (
@@ -57,25 +59,31 @@ export default function Footer() {
       >
         <FooterColumn
           title='Ampat Reverie'
-          items={["About", "Top Destination", "Why Visit?", "Gallery"]}
+          items={[
+            { label: "About", href: "/#about" },
+            { label: "Top Destination", href: "/#top-destination" },
+            { label: "Why Visit?", href: "/#why-visit" },
+            { label: "Gallery", href: "/#gallery" },
+          ]}
         />
         <FooterColumn
           title='Explore Raja Ampat'
           items={[
-            "Wayag Island",
-            "Piaynemo Viewpoint",
-            "Misool Eco Area",
-            "Arborek Village",
-            "Pasir Timbul Spot",
+            { label: "Wayag Island", href: "#top-destination", slideId: "wayag" },
+            { label: "Piaynemo Viewpoint", href: "#top-destination", slideId: "piaynemo" },
+            { label: "Misool Eco Area", href: "#top-destination", slideId: "misool" },
+            { label: "Arborek Village", href: "#top-destination", slideId: "arborek" }, 
+            { label: "Pasir Timbul Spot", href: "#top-destination", slideId: "pasir-timbul" },
+            { label: "Teluk Kabui", href: "#top-destination", slideId: "teluk-kabui" },
           ]}
         />
         <FooterColumn
           title='Our Company'
           items={[
-            "Jl. Laut Biru No. 88, Waisai",
-            "Raja Ampat, Indonesia",
-            "+62 812 3456 7890",
-            "hello@ampatreverie.com",
+            { label: "Jl. Laut Biru No. 88, Waisai", href: "#" },
+            { label: "Raja Ampat, Indonesia", href: "#" },
+            { label: "+62 812 3456 7890", href: "tel:+6281234567890" },
+            { label: "hello@ampatreverie.com", href: "mailto:hello@ampatreverie.com" },
           ]}
         />
       </motion.div>
@@ -99,6 +107,60 @@ export default function Footer() {
 }
 
 function FooterColumn({ title, items }) {
+  const handleScrollToSection = (e, href, slideId) => {
+    e.preventDefault();
+    
+    // First part: Scroll to the section
+    const targetId = href.replace("/#", "").replace("#", "");
+    const element = document.getElementById(targetId);
+    
+    if (element) {
+      // Scroll to the element
+      element.scrollIntoView({ behavior: "smooth" });
+      
+      // If we have a slideId, handle slide navigation
+      if (slideId) {
+        // Use the direct approach which is more reliable
+        setTimeout(() => {
+          // Simple and direct approach - navigate directly to the slide index
+          const slides = [
+            "arborek",
+            "misool",
+            "pasir-timbul",
+            "piaynemo",
+            "teluk-kabui",
+            "wayag"
+          ];
+          
+          // Find the slide index
+          const slideIndex = slides.indexOf(slideId);
+          
+          if (slideIndex >= 0) {
+            // Access the swiper instance directly
+            const swiperElement = document.querySelector('#top-destination .swiper-container')?.swiper;
+            
+            if (swiperElement) {
+              swiperElement.slideTo(slideIndex);
+              console.log(`Directly navigated to slide ${slideId} at index ${slideIndex}`);
+            } else {
+              // Alternative method - use the global function
+              if (window.navigateToSlide) {
+                window.navigateToSlide(slideId);
+                console.log(`Used global function to navigate to ${slideId}`);
+              } else {
+                console.error("Neither Swiper instance nor global function found");
+              }
+            }
+          } else {
+            console.warn(`Invalid slide ID: ${slideId}`);
+          }
+        }, 800); // Wait for scroll to complete
+      }
+    } else {
+      console.warn(`Element with ID "${targetId}" not found`);
+    }
+  };
+
   return (
     <div className='w-full sm:w-auto max-w-xs flex flex-col space-y-2 text-center sm:text-left'>
       <h2 className='text-lg font-semibold mb-2'>{title}</h2>
@@ -108,7 +170,22 @@ function FooterColumn({ title, items }) {
             key={idx}
             className='hover:text-gray-300 transition duration-300 cursor-pointer'
           >
-            {item}
+            {item.href.startsWith("tel:") || item.href.startsWith("mailto:") ? (
+              <a 
+                href={item.href} 
+                className="hover:text-gray-300 transition duration-300"
+              >
+                {item.label}
+              </a>
+            ) : (
+              <a 
+                href={item.href} 
+                onClick={(e) => handleScrollToSection(e, item.href, item.slideId)}
+                className="hover:text-gray-300 transition duration-300"
+              >
+                {item.label}
+              </a>
+            )}
           </li>
         ))}
       </ul>

@@ -17,7 +17,7 @@ export default function TopNarrowSection() {
         h-[102px]
         bg-white
         rounded-[20px]
-        px-4
+        px-6
         shadow
         mt-[64px]
         z-40

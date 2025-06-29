@@ -32,7 +32,7 @@ export default function UserMenu() {
     <div className="flex flex-col items-end" ref={menuRef}>
       <button
         onClick={toggleMenu}
-        className="flex items-center gap-2 text-white hover:text-gray-200 transition-colors p-2 rounded-lg hover:bg-white/10"
+        className="flex items-center gap-2 text-gray-800 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-gray-100/30"
         aria-label={status === "authenticated" ? "User menu" : "Sign in"}
       >
         {status === "authenticated" ? (
@@ -40,13 +40,13 @@ export default function UserMenu() {
             <span className="hidden md:inline text-sm font-medium truncate max-w-[120px]">
               {session.user.name || session.user.email}
             </span>
-            <User size={20} className="text-white" />
-            <ChevronDown size={16} className={`text-white transition-transform duration-300 ${isMenuOpen ? 'rotate-180' : ''}`} />
+            <User size={20} className="text-gray-800" />
+            <ChevronDown size={16} className={`text-gray-800 transition-transform duration-300 ${isMenuOpen ? 'rotate-180' : ''}`} />
           </>
         ) : (
           <>
             <span className="hidden md:inline text-sm font-medium">Sign In</span>
-            <LogIn size={20} className="text-white" />
+            <LogIn size={20} className="text-gray-800" />
           </>
         )}
       </button>

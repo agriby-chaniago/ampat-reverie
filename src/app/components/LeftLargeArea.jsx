@@ -13,7 +13,7 @@ export default function LeftLargeArea() {
     flex-col
     justify-between
     w-full lg:w-[1044px]
-    h-auto min-h-[380px] sm:min-h-[420px] lg:h-[724px]
+    h-auto min-h-[375px] sm:min-h-[420px] lg:h-[724px]
     bg-white/5
     backdrop-blur-xs
     shadow-lg

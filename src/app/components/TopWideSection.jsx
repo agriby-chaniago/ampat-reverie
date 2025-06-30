@@ -139,9 +139,9 @@ export default function TopWideSection({ isMobile, isTablet }) {
               Gallery
             </a>
           </nav>
-          <div className='ml-3'>
+          {/* <div className='ml-3'>
             <UserMenu isMobile={isMobile} isTablet={isTablet} />
-          </div>
+          </div> */}
         </div>
       )}
     </motion.div>

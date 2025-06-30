@@ -31,7 +31,7 @@ export default function About() {
   return (
     <div
       id='about'
-      className='w-full flex flex-col gap-2 sm:gap-4 lg:gap-6 py-16 sm:py-24 lg:py-34 px-4 sm:px-6 relative'
+      className='w-full flex flex-col gap-2 sm:gap-4 lg:gap-6 py-16 sm:py-24 lg:py-32 px-4 sm:px-6 relative'
     >
       {isMobile ? (
         <>

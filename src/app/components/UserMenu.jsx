@@ -12,18 +12,23 @@ export default function UserMenu({ isMobile, isTablet }) {
   const menuRef = useRef(null);
   const isSmallDevice = isMobile || isTablet;
 
+  // Fixed useEffect with proper dependencies
   useEffect(() => {
+    // Define the handler inside useEffect
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsMenuOpen(false);
       }
     }
 
+    // Add event listener
     document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup function
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, []); // We can keep empty array since menuRef won't change and setIsMenuOpen is stable
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

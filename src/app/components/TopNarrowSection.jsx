@@ -14,13 +14,13 @@ export default function TopNarrowSection({ isMobile, isTablet }) {
         flex
         items-center
         justify-between
-        ${isTablet ? 'w-[250px]' : 'w-[716px]'}
-        ${isTablet ? 'h-[85px]' : 'h-[102px]'}
+        ${isTablet ? "w-[250px]" : "w-[716px]"}
+        ${isTablet ? "h-[85px]" : "h-[102px]"}
         bg-white
         rounded-[20px]
-        ${isTablet ? 'px-4' : 'px-6'}
+        ${isTablet ? "px-4" : "px-6"}
         shadow
-        ${isTablet ? 'mt-[40px]' : 'mt-[64px]'}
+        ${isTablet ? "mt-[40px]" : "mt-[64px]"}
         z-40
       `}
     >

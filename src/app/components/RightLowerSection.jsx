@@ -35,12 +35,16 @@ export default function RightLowerSection({ deviceSize }) {
         border
         border-white
         shadow-md
+        mt-2
       `}
     >
       <Card className='bg-transparent border-none shadow-none h-full'>
         <CardContent className='flex flex-col justify-between h-full text-white font-[Gully] text-base sm:text-xl md:text-2xl lg:text-[24px] p-0 sm:p-2'>
           {stats.map((item, index) => (
-            <div key={index} className='flex justify-between items-center py-2 sm:py-3'>
+            <div
+              key={index}
+              className='flex justify-between items-center py-2 sm:py-3'
+            >
               <span className='font-bold'>{item.label}</span>
               <span className='font-bold'>{item.value}</span>
             </div>

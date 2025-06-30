@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-
-// For demo purposes, we'll store feedback in memory
-// In a real app, you'd use a database
-const feedbackItems = [];
+import { getServerSession } from "next-auth/next";
+import { supabaseAdmin } from "@/lib/supabase";
 
 export async function POST(request) {
   try {
@@ -27,26 +24,42 @@ export async function POST(request) {
       );
     }
 
-    // Create feedback entry
-    const feedback = {
-      id: feedbackItems.length + 1,
-      userId: session.user.id,
-      userName: session.user.name || session.user.email,
-      rating,
-      comment,
-      vote,
-      timestamp: new Date(),
-    };
+    try {
+      // Save feedback to Supabase
+      const { data: feedback, error } = await supabaseAdmin
+        .from('feedback')
+        .insert({
+          user_id: session.user.id,
+          rating,
+          comment,
+          vote
+        })
+        .select()
+        .single();
 
-    feedbackItems.push(feedback);
+      if (error) {
+        console.error("Error saving feedback:", error);
+        return NextResponse.json(
+          { message: "Failed to submit feedback" },
+          { status: 500 }
+        );
+      }
 
-    return NextResponse.json(
-      { 
-        message: "Feedback submitted successfully",
-        feedback: feedback
-      }, 
-      { status: 201 }
-    );
+      return NextResponse.json(
+        { 
+          message: "Feedback submitted successfully",
+          feedback
+        }, 
+        { status: 201 }
+      );
+    } catch (dbError) {
+      console.error("Database error:", dbError);
+      return NextResponse.json(
+        { message: "Database error" },
+        { status: 500 }
+      );
+    }
+    
   } catch (error) {
     console.error("Feedback submission error:", error);
     return NextResponse.json(
@@ -58,5 +71,23 @@ export async function POST(request) {
 
 // Optional: GET route to retrieve feedback (for admin purposes)
 export async function GET() {
-  return NextResponse.json({ items: feedbackItems });
+  try {
+    const { data: feedbackItems, error } = await supabaseAdmin
+      .from('feedback')
+      .select(`
+        *,
+        users:user_id (name, email)
+      `)
+      .order('submitted_at', { ascending: false });
+
+    if (error) {
+      console.error("Error fetching feedback:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ items: feedbackItems });
+  } catch (error) {
+    console.error("Error in GET feedback:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }

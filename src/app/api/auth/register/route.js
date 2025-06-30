@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { hash } from "bcrypt";
-import { users } from "../[...nextauth]/route"; // Import users from NextAuth route
+import { supabaseAdmin } from "@/lib/supabase";
 
 export async function POST(request) {
   try {
@@ -14,39 +14,76 @@ export async function POST(request) {
       );
     }
 
-    // Check if user already exists
-    const existingUser = users.find(user => user.email === email);
-    if (existingUser) {
+    try {
+      // Check if user already exists in Supabase
+      const { data: existingUser, error: checkError } = await supabaseAdmin
+        .from('users')
+        .select('id')
+        .eq('email', email)
+        .maybeSingle();
+      
+      if (checkError) {
+        console.error("Error checking user:", checkError);
+        return NextResponse.json(
+          { message: "Error checking user existence" },
+          { status: 500 }
+        );
+      }
+      
+      if (existingUser) {
+        return NextResponse.json(
+          { message: "User already exists" },
+          { status: 409 }
+        );
+      }
+
+      // Hash the password
+      const hashedPassword = await hash(password, 10);
+
+      // Insert user into Supabase
+      const { data: newUser, error: insertError } = await supabaseAdmin
+        .from('users')
+        .insert({
+          name,
+          email,
+          password: hashedPassword
+          // created_at will be set automatically by Supabase
+        });
+
+      if (insertError) {
+        console.error("Error creating user:", insertError);
+        return NextResponse.json(
+          { message: "Failed to create user" },
+          { status: 500 }
+        );
+      }
+
+      // Fetch the newly created user
+      const { data: createdUser, error: fetchError } = await supabaseAdmin
+        .from('users')
+        .select('id, name, email, created_at')
+        .eq('email', email)
+        .single();
+
+      if (fetchError) {
+        console.error("Error fetching created user:", fetchError);
+      }
+
       return NextResponse.json(
-        { message: "User already exists" },
-        { status: 409 }
+        { 
+          message: "User created successfully", 
+          user: createdUser || { name, email }
+        }, 
+        { status: 201 }
+      );
+    } catch (dbError) {
+      console.error("Database error:", dbError);
+      return NextResponse.json(
+        { message: "Database error" },
+        { status: 500 }
       );
     }
-
-    // Hash the password
-    const hashedPassword = await hash(password, 10);
-
-    // Create user (in a real app, this would save to a database)
-    const newUser = {
-      id: users.length + 1,
-      name,
-      email,
-      password: hashedPassword,
-      createdAt: new Date(),
-    };
-
-    users.push(newUser);
-
-    // Return success but don't include the password
-    const { password: _, ...userWithoutPassword } = newUser;
     
-    return NextResponse.json(
-      { 
-        message: "User created successfully", 
-        user: userWithoutPassword 
-      }, 
-      { status: 201 }
-    );
   } catch (error) {
     console.error("Registration error:", error);
     return NextResponse.json(

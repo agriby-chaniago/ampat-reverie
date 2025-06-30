@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/app/components/ui/card";
@@ -12,12 +12,21 @@ import { Separator } from "@/app/components/ui/separator";
 
 export default function SignIn() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const registered = searchParams.get("registered");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    if (registered === "true") {
+      setSuccessMessage("Account created successfully! Please sign in.");
+    }
+  }, [registered]);
 
   const togglePassword = () => setShowPassword((prev) => !prev);
 
@@ -56,6 +65,12 @@ export default function SignIn() {
             {error && (
               <div className="bg-red-100 text-red-700 border border-red-400 px-4 py-2 rounded text-sm flex items-center">
                 <span>{error}</span>
+              </div>
+            )}
+
+            {successMessage && (
+              <div className="bg-green-100 text-green-700 border border-green-400 px-4 py-2 rounded text-sm flex items-center">
+                <span>{successMessage}</span>
               </div>
             )}
 

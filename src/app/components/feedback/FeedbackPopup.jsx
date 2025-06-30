@@ -55,32 +55,34 @@ export default function FeedbackPopup() {
     setIsSubmitting(true);
     
     try {
-      // Here you would implement your API call
-      // For example:
-      /*
-      await fetch('/api/feedback', {
+      const response = await fetch('/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: session.user.id,
           rating,
           comment,
-          vote,
-          timestamp: new Date()
+          vote
         })
       });
-      */
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to submit feedback');
+      }
       
       setSubmitSuccess(true);
       setTimeout(() => {
         handleClose();
         setSubmitSuccess(false);
+        // Reset form
+        setRating(0);
+        setComment('');
+        setVote(null);
       }, 2000);
     } catch (error) {
       console.error("Error submitting feedback:", error);
+      alert('Failed to submit feedback: ' + error.message);
     } finally {
       setIsSubmitting(false);
     }

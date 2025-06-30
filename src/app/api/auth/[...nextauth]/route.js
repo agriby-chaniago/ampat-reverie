@@ -2,16 +2,21 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
-
-// Create a simple in-memory user store instead of importing
-// This avoids circular dependencies between API routes
-const users = [];
+import { supabaseAdmin } from "@/lib/supabase";
 
 const handler = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -29,48 +34,105 @@ const handler = NextAuth({
           };
         }
 
-        // Then check registered users
-        const user = users.find(user => user.email === credentials.email);
-        if (!user) {
+        try {
+          // Find user in Supabase
+          const { data: user, error } = await supabaseAdmin
+            .from('users')
+            .select('*')
+            .eq('email', credentials.email)
+            .single();
+
+          if (error || !user) {
+            console.log(`User not found: ${credentials.email}`);
+            return null;
+          }
+
+          // Verify password
+          const passwordMatches = await compare(credentials.password, user.password);
+          if (!passwordMatches) {
+            console.log(`Password incorrect for: ${credentials.email}`);
+            return null;
+          }
+
+          // Return user without password
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          };
+        } catch (error) {
+          console.error("Auth error:", error);
           return null;
         }
-
-        // Verify password
-        const passwordMatches = await compare(credentials.password, user.password);
-        if (!passwordMatches) {
-          return null;
-        }
-
-        // Return user without password
-        const { password, ...userWithoutPassword } = user;
-        return userWithoutPassword;
       }
     }),
   ],
-  pages: {
-    signIn: "/auth/signin",
-    signOut: "/auth/signout",
-    error: "/auth/error",
-  },
   callbacks: {
-    async jwt({ token, user }) {
+    // Handle sign in from OAuth providers
+    async signIn({ user, account }) {
+      if (account.provider === "google") {
+        try {
+          // Check if user exists in our database
+          const { data: existingUser } = await supabaseAdmin
+            .from('users')
+            .select('id')
+            .eq('email', user.email)
+            .maybeSingle();
+          
+          // If not, create a new user
+          if (!existingUser) {
+            const { data: newUser, error } = await supabaseAdmin
+              .from('users')
+              .insert({
+                email: user.email,
+                name: user.name,
+                // No password needed for OAuth sign-ins
+              })
+              .select('id')
+              .single();
+              
+            if (error) {
+              console.error("Error creating user from Google sign in:", error);
+              return false;
+            }
+            
+            // Update user id to match our database
+            user.id = newUser.id;
+          } else {
+            // Update user id to match our database
+            user.id = existingUser.id;
+          }
+        } catch (error) {
+          console.error("Error in OAuth sign in:", error);
+          return false;
+        }
+      }
+      return true;
+    },
+    async jwt({ token, user, account }) {
+      // Include user ID in the token
       if (user) {
         token.id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
+      // Make user ID available in the session
       if (session?.user) {
         session.user.id = token.id;
       }
       return session;
     },
   },
+  pages: {
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
+    error: "/auth/error",
+  },
   session: {
     strategy: "jwt",
   },
+  debug: process.env.NODE_ENV === 'development',
 });
 
-// Export the users array for use in the register route
-export { users };
 export { handler as GET, handler as POST };

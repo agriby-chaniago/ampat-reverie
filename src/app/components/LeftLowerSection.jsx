@@ -24,22 +24,22 @@ export default function LeftLowerSection({ deviceSize }) {
         rounded-[12px]
         sm:rounded-[16px]
         lg:rounded-[20px]
-        flex 
+        flex
         flex-col
         sm:flex-row
-        justify-between 
-        px-5
+        justify-between
+        px-3
         sm:px-6
         md:px-8
-        lg:px-10 
-        py-6
+        lg:px-10
+        py-4
         sm:py-8
         lg:pt-10
         shadow-lg
       `}
     >
       {/* Left Content Group */}
-      <div className='flex flex-col gap-4 w-full sm:max-w-[45%] mb-6 sm:mb-0'>
+      <div className='flex flex-col w-full sm:max-w-[45%] mb-6 sm:mb-0'>
         <div className='flex items-center gap-2'>
           <div className='w-[36px] h-[36px] sm:w-[42px] sm:h-[42px] rounded-[8px] flex items-center justify-center shadow-sm bg-gray-50'>
             <Globe
@@ -59,7 +59,7 @@ export default function LeftLowerSection({ deviceSize }) {
       </div>
 
       {/* Right Content Group */}
-      <div className='flex flex-col gap-4 w-full sm:max-w-[45%] sm:mr-4'>
+      <div className='flex flex-col w-full sm:max-w-[45%] sm:mr-4'>
         <div className='flex items-center gap-2'>
           <div className='w-[36px] h-[36px] sm:w-[42px] sm:h-[42px] rounded-[8px] flex items-center justify-center shadow-sm bg-gray-50'>
             <Sailboat

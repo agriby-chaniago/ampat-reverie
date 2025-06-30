@@ -67,7 +67,7 @@ export default function RightBottom() {
             px-4
           '
         >
-          <span className="whitespace-nowrap overflow-hidden text-ellipsis">
+          <span className='whitespace-nowrap overflow-hidden text-ellipsis'>
             Where would you like to go?
           </span>
         </a>

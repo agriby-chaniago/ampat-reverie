@@ -90,72 +90,70 @@ export default function SignUp() {
     setValidationErrors(errors);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+// Ubah bagian handleSubmit pada sign-up
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // Reset general error
-    setError("");
+  // Reset general error
+  setError("");
 
-    // Complete validation before submission
-    const emailIsValid = validateEmail(email);
-    const { isValid: passwordIsValid } = validatePassword(password);
-    const passwordsMatch = password === confirmPassword;
+  // Complete validation before submission
+  const emailIsValid = validateEmail(email);
+  const { isValid: passwordIsValid } = validatePassword(password);
+  const passwordsMatch = password === confirmPassword;
 
-    if (!emailIsValid) {
-      setValidationErrors((prev) => ({
-        ...prev,
-        email: "Please enter a valid email",
-      }));
-      return;
-    }
+  if (!emailIsValid) {
+    setValidationErrors((prev) => ({
+      ...prev,
+      email: "Please enter a valid email",
+    }));
+    return;
+  }
 
-    if (!passwordIsValid) {
-      setValidationErrors((prev) => ({
-        ...prev,
-        password: "Password must be at least 8 characters and include numbers",
-      }));
-      return;
-    }
+  if (!passwordIsValid) {
+    setValidationErrors((prev) => ({
+      ...prev,
+      password: "Password must be at least 8 characters and include numbers",
+    }));
+    return;
+  }
 
-    if (!passwordsMatch) {
-      setValidationErrors((prev) => ({
-        ...prev,
-        confirmPassword: "Passwords do not match",
-      }));
-      return;
-    }
+  if (!passwordsMatch) {
+    setValidationErrors((prev) => ({
+      ...prev,
+      confirmPassword: "Passwords do not match",
+    }));
+    return;
+  }
 
-    setIsLoading(true);
+  setIsLoading(true);
 
-    try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
+  try {
+    const response = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!response.ok) {
-        if (response.status === 409) {
-          setError("Email already exists. Please sign in instead.");
-        } else {
-          throw new Error(data.message || "Error creating account");
-        }
-        setIsLoading(false);
+    if (!response.ok) {
+      if (response.status === 409) {
+        setError("Email already exists. Please sign in instead.");
       } else {
-        // If using sonner
-        // toast.success("Account created successfully!");
-
-        // Redirect with success parameter
-        router.push("/auth/signin?registered=true");
+        throw new Error(data.message || "Error creating account");
       }
-    } catch (err) {
-      console.error("Registration error:", err);
-      setError(err.message || "An unexpected error occurred");
       setIsLoading(false);
+    } else {
+      // Redirect with success parameter AND email
+      router.push(`/auth/signin?registered=true&email=${encodeURIComponent(email)}`);
     }
-  };
+  } catch (err) {
+    console.error("Registration error:", err);
+    setError(err.message || "An unexpected error occurred");
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-[url('/assets/bg.png')] px-4 py-8">

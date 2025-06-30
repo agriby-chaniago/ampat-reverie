@@ -2,9 +2,12 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { supabaseAdmin } from "@/lib/supabase";
 
+// For submitting new feedback
 export async function POST(request) {
   try {
-    // Check if user is authenticated
+    console.log("POST /api/feedback called");
+    
+    // Check authentication
     const session = await getServerSession();
     if (!session) {
       return NextResponse.json(
@@ -13,8 +16,13 @@ export async function POST(request) {
       );
     }
 
+    console.log("Authenticated user:", session.user.email);
+    
     // Parse request body
-    const { rating, comment, vote } = await request.json();
+    const body = await request.json();
+    const { rating, comment, vote } = body;
+    
+    console.log("Feedback data:", { rating, comment, vote });
     
     // Validate data
     if (rating === undefined && !comment && vote === null) {
@@ -25,11 +33,62 @@ export async function POST(request) {
     }
 
     try {
+      // Get user by email
+      const { data: userData, error: userError } = await supabaseAdmin
+        .from('users')
+        .select('id')
+        .eq('email', session.user.email)
+        .single();
+        
+      if (userError || !userData) {
+        console.error("Error finding user:", userError || "User not found");
+        
+        // Create user record if it doesn't exist
+        const { data: newUser, error: createUserError } = await supabaseAdmin
+          .from('users')
+          .insert({
+            email: session.user.email,
+            name: session.user.name || session.user.email.split('@')[0]
+          })
+          .select('id')
+          .single();
+          
+        if (createUserError) {
+          console.error("Error creating user:", createUserError);
+          return NextResponse.json(
+            { message: "Failed to create user record" },
+            { status: 500 }
+          );
+        }
+        
+        console.log("Created new user:", newUser);
+        userData = newUser;
+      }
+
+      console.log("User found/created:", userData);
+
+      // Check if user already submitted feedback
+      const { data: existingFeedback, error: checkError } = await supabaseAdmin
+        .from('feedback')
+        .select('id')
+        .eq('user_id', userData.id)
+        .maybeSingle();
+        
+      if (existingFeedback) {
+        console.log("User already submitted feedback before");
+        return NextResponse.json(
+          { message: "You have already submitted feedback" },
+          { status: 409 }
+        );
+      }
+
+      console.log("Saving new feedback...");
+      
       // Save feedback to Supabase
       const { data: feedback, error } = await supabaseAdmin
         .from('feedback')
         .insert({
-          user_id: session.user.id,
+          user_id: userData.id,
           rating,
           comment,
           vote
@@ -45,6 +104,8 @@ export async function POST(request) {
         );
       }
 
+      console.log("Feedback saved successfully:", feedback);
+      
       return NextResponse.json(
         { 
           message: "Feedback submitted successfully",
@@ -55,39 +116,148 @@ export async function POST(request) {
     } catch (dbError) {
       console.error("Database error:", dbError);
       return NextResponse.json(
-        { message: "Database error" },
+        { message: `Database error: ${dbError.message}` },
         { status: 500 }
       );
     }
-    
   } catch (error) {
     console.error("Feedback submission error:", error);
     return NextResponse.json(
-      { message: "Error submitting feedback" },
+      { message: `Error submitting feedback: ${error.message}` },
       { status: 500 }
     );
   }
 }
 
-// Optional: GET route to retrieve feedback (for admin purposes)
-export async function GET() {
+// For updating existing feedback - similar fix needed here
+export async function PUT(request) {
   try {
-    const { data: feedbackItems, error } = await supabaseAdmin
-      .from('feedback')
-      .select(`
-        *,
-        users:user_id (name, email)
-      `)
-      .order('submitted_at', { ascending: false });
-
-    if (error) {
-      console.error("Error fetching feedback:", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    console.log("PUT /api/feedback called");
+    
+    // Check authentication
+    const session = await getServerSession();
+    if (!session) {
+      return NextResponse.json(
+        { message: "Unauthorized" },
+        { status: 401 }
+      );
     }
 
-    return NextResponse.json({ items: feedbackItems });
+    console.log("Authenticated user:", session.user.email);
+    
+    // Parse request body
+    const body = await request.json();
+    const { id, rating, comment, vote } = body;
+    
+    // Validate data
+    if (!id) {
+      return NextResponse.json(
+        { message: "Feedback ID is required" },
+        { status: 400 }
+      );
+    }
+
+    console.log("Update feedback ID:", id);
+    
+    try {
+      // Get user by email, create if doesn't exist
+      let userData;
+      
+      const { data: existingUser, error: userError } = await supabaseAdmin
+        .from('users')
+        .select('id')
+        .eq('email', session.user.email)
+        .single();
+        
+      if (userError || !existingUser) {
+        // Create user record if it doesn't exist
+        const { data: newUser, error: createUserError } = await supabaseAdmin
+          .from('users')
+          .insert({
+            email: session.user.email,
+            name: session.user.name || session.user.email.split('@')[0]
+          })
+          .select('id')
+          .single();
+          
+        if (createUserError) {
+          console.error("Error creating user:", createUserError);
+          return NextResponse.json(
+            { message: "Failed to create user record" },
+            { status: 500 }
+          );
+        }
+        
+        userData = newUser;
+      } else {
+        userData = existingUser;
+      }
+
+      // Check if feedback exists and belongs to this user
+      const { data: existingFeedback, error: checkError } = await supabaseAdmin
+        .from('feedback')
+        .select('id, user_id')
+        .eq('id', id)
+        .single();
+        
+      if (checkError || !existingFeedback) {
+        console.log("Feedback not found");
+        return NextResponse.json(
+          { message: "Feedback not found" },
+          { status: 404 }
+        );
+      }
+      
+      if (existingFeedback.user_id !== userData.id) {
+        console.log("User trying to update someone else's feedback");
+        return NextResponse.json(
+          { message: "You can only update your own feedback" },
+          { status: 403 }
+        );
+      }
+
+      console.log("Updating feedback...");
+      
+      // Update feedback
+      const { data: updatedFeedback, error } = await supabaseAdmin
+        .from('feedback')
+        .update({
+          rating,
+          comment,
+          vote
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error updating feedback:", error);
+        return NextResponse.json(
+          { message: "Failed to update feedback" },
+          { status: 500 }
+        );
+      }
+
+      console.log("Feedback updated successfully:", updatedFeedback);
+      
+      return NextResponse.json(
+        { 
+          message: "Feedback updated successfully",
+          feedback: updatedFeedback
+        }
+      );
+    } catch (dbError) {
+      console.error("Database error:", dbError);
+      return NextResponse.json(
+        { message: `Database error: ${dbError.message}` },
+        { status: 500 }
+      );
+    }
   } catch (error) {
-    console.error("Error in GET feedback:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Feedback update error:", error);
+    return NextResponse.json(
+      { message: `Error updating feedback: ${error.message}` },
+      { status: 500 }
+    );
   }
 }

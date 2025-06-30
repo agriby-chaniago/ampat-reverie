@@ -2,7 +2,7 @@
 
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/app/components/ui/card";
@@ -14,6 +14,7 @@ export default function SignIn() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const registered = searchParams.get("registered");
+  const registeredEmail = searchParams.get("email"); // Ambil email dari URL jika ada
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,12 +22,27 @@ export default function SignIn() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  
+  // Buat ref untuk field password
+  const passwordInputRef = useRef(null);
 
   useEffect(() => {
+    // Jika ada email dari registrasi, set email dan fokus ke password
+    if (registeredEmail) {
+      setEmail(registeredEmail);
+      // Fokus ke field password setelah render selesai
+      setTimeout(() => {
+        if (passwordInputRef.current) {
+          passwordInputRef.current.focus();
+        }
+      }, 100);
+    }
+    
+    // Tampilkan pesan sukses jika registrasi berhasil
     if (registered === "true") {
       setSuccessMessage("Account created successfully! Please sign in.");
     }
-  }, [registered]);
+  }, [registered, registeredEmail]);
 
   const togglePassword = () => setShowPassword((prev) => !prev);
 
@@ -89,7 +105,7 @@ export default function SignIn() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-10"
+                  className={`h-10 ${registeredEmail ? 'bg-gray-50' : ''}`}
                   placeholder="your@email.com"
                 />
               </div>
@@ -111,6 +127,7 @@ export default function SignIn() {
                     onChange={(e) => setPassword(e.target.value)}
                     className="h-10 pr-10"
                     placeholder="••••••••"
+                    ref={passwordInputRef} // Tambahkan ref ke input password
                   />
                   <button
                     type="button"

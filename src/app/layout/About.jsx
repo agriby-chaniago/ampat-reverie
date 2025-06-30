@@ -1,16 +1,9 @@
-'use client';
+"use client";
 
 import CenterLargeArea from "../components/CenterLargeArea";
 import LeftLowerSection from "../components/LeftLowerSection";
 import RightLowerSection from "../components/RightLowerSection";
 import { useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation } from 'swiper/modules';
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 
 export default function About() {
   const [deviceSize, setDeviceSize] = useState("desktop");
@@ -36,37 +29,17 @@ export default function About() {
   const isMobile = deviceSize === "mobile";
 
   return (
-    <div 
+    <div
       id='about'
-      className='w-full flex flex-col gap-2 sm:gap-4 lg:gap-6 py-16 sm:py-24 lg:py-34 px-4 sm:px-6 relative'
+      className='w-full flex flex-col gap-2 sm:gap-4 lg:gap-6 py-16 sm:py-24 lg:py-32 px-4 sm:px-6 relative'
     >
-      {/* Mobile Swiper view */}
       {isMobile ? (
-        <div className="w-full">
-          <Swiper
-            modules={[Pagination, Navigation]}
-            pagination={{
-              clickable: true,
-              dynamicBullets: true,
-            }}
-            navigation={true}
-            spaceBetween={20}
-            slidesPerView={1}
-            className="about-swiper"
-          >
-            <SwiperSlide>
-              <CenterLargeArea deviceSize={deviceSize} />
-            </SwiperSlide>
-            <SwiperSlide>
-              <LeftLowerSection deviceSize={deviceSize} />
-            </SwiperSlide>
-            <SwiperSlide>
-              <RightLowerSection deviceSize={deviceSize} />
-            </SwiperSlide>
-          </Swiper>
-        </div>
+        <>
+          <CenterLargeArea deviceSize={deviceSize} />
+          <LeftLowerSection deviceSize={deviceSize} />
+          <RightLowerSection deviceSize={deviceSize} />
+        </>
       ) : (
-        /* Desktop/Tablet regular view */
         <>
           <CenterLargeArea deviceSize={deviceSize} />
           <div className='w-full flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 sm:gap-8 lg:gap-10'>

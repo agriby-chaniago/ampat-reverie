@@ -17,8 +17,8 @@ export default function LeftLowerSection({ deviceSize }) {
         md:max-w-[80%]
         lg:w-[1044px]
         h-auto
-        min-h-[300px]
-        sm:min-h-[320px]
+        min-h-[250px]
+        sm:min-h-[280px]
         lg:h-[300px]
         bg-white
         rounded-[12px]
@@ -42,7 +42,11 @@ export default function LeftLowerSection({ deviceSize }) {
       <div className='flex flex-col gap-4 w-full sm:max-w-[45%] mb-6 sm:mb-0'>
         <div className='flex items-center gap-2'>
           <div className='w-[36px] h-[36px] sm:w-[42px] sm:h-[42px] rounded-[8px] flex items-center justify-center shadow-sm bg-gray-50'>
-            <Globe size={isMobile ? 24 : 30} strokeWidth={2.5} color='#102437' />
+            <Globe
+              size={isMobile ? 24 : 30}
+              strokeWidth={2.5}
+              color='#102437'
+            />
           </div>
           <h4 className='font-[Gully] font-semibold text-lg sm:text-xl lg:text-[24px] leading-tight tracking-normal text-[#102437]'>
             Geographic Wonder
@@ -58,7 +62,11 @@ export default function LeftLowerSection({ deviceSize }) {
       <div className='flex flex-col gap-4 w-full sm:max-w-[45%] sm:mr-4'>
         <div className='flex items-center gap-2'>
           <div className='w-[36px] h-[36px] sm:w-[42px] sm:h-[42px] rounded-[8px] flex items-center justify-center shadow-sm bg-gray-50'>
-            <Sailboat size={isMobile ? 24 : 30} strokeWidth={2.5} color='#102437' />
+            <Sailboat
+              size={isMobile ? 24 : 30}
+              strokeWidth={2.5}
+              color='#102437'
+            />
           </div>
           <h4 className='font-[Gully] font-semibold text-lg sm:text-xl lg:text-[24px] leading-tight tracking-normal text-[#102437]'>
             Marine Paradise

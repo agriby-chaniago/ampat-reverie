@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 export default function CenterLargeArea({ deviceSize }) {
   const isMobile = deviceSize === "mobile";
   const isTablet = deviceSize === "tablet";
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 0 }}
@@ -35,12 +35,12 @@ export default function CenterLargeArea({ deviceSize }) {
         sm:py-8
         md:py-10
         lg:py-[40px]
-        mt-8
+        mt-4
         sm:mt-12
         lg:mt-[64px]
-        mb-6
-        sm:mb-8
-        lg:mb-[32px]
+        mb-2
+          sm:mb-3
+        lg:mb-4
         border
         border-white
         overflow-hidden

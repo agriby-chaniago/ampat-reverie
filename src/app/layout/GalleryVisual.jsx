@@ -42,19 +42,21 @@ export default function GalleryVisual() {
   }));
 
   // Show fewer images on mobile
-  const visibleImages = isSmallDevice ? dynamicEl.slice(0, 6) : dynamicEl.slice(0, 8);
+  const visibleImages = isSmallDevice
+    ? dynamicEl.slice(0, 6)
+    : dynamicEl.slice(0, 8);
 
   return (
-    <section 
-      id='gallery' 
-      className='w-full py-12 sm:py-16 md:py-24 lg:py-56 px-4 sm:px-6 md:px-8'
+    <section
+      id='gallery'
+      className='w-full py-12 sm:py-16 md:py-24 lg:py-44 px-4 sm:px-6 md:px-8'
     >
       <Header isMobile={isMobile} isTablet={isTablet} />
-      <GalleryFlex 
-        images={visibleImages} 
-        galleryRef={galleryRef} 
-        isMobile={isMobile} 
-        isTablet={isTablet} 
+      <GalleryFlex
+        images={visibleImages}
+        galleryRef={galleryRef}
+        isMobile={isMobile}
+        isTablet={isTablet}
       />
       <LightGallery
         onInit={(ref) => (galleryRef.current = ref.instance)}
@@ -69,27 +71,45 @@ export default function GalleryVisual() {
 
 function Header({ isMobile, isTablet }) {
   const isSmallDevice = isMobile || isTablet;
-  
+
   return (
-    <motion.header 
-      className={`text-center ${isSmallDevice ? 'mb-6 sm:mb-8' : 'mb-12 md:mb-16'}`}
+    <motion.header
+      className={`text-center ${
+        isSmallDevice ? "mb-3 sm:mb-4" : "mb-5 md:mb-8"
+      }`}
       initial={{ opacity: 0, y: -20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, ease: "easeOut" }}
     >
-      <h2 className={`
+      <h2
+        className={`
         text-white font-[Gully] font-normal tracking-[0.05em]
-        ${isMobile ? 'text-4xl' : isTablet ? 'text-5xl' : 'text-5xl sm:text-6xl md:text-[80px]'}
-        ${isSmallDevice ? 'leading-tight' : 'leading-tight md:leading-[100px]'}
-      `}>
+        ${
+          isMobile
+            ? "text-4xl"
+            : isTablet
+            ? "text-5xl"
+            : "text-5xl sm:text-6xl md:text-[80px]"
+        }
+        ${isSmallDevice ? "leading-tight" : "leading-tight md:leading-[100px]"}
+      `}
+      >
         Gallery Visual
       </h2>
-      <p className={`
-        text-gray-300 mt-2 sm:mt-3 md:mt-4 mx-auto
-        ${isMobile ? 'text-sm max-w-xs' : isTablet ? 'text-base max-w-md' : 'text-lg max-w-2xl'}
-      `}>
-        Explore the breathtaking beauty of Raja Ampat 
+      <p
+        className={`
+        text-gray-300 mx-auto
+        ${
+          isMobile
+            ? "text-sm max-w-xs"
+            : isTablet
+            ? "text-base max-w-md"
+            : "text-lg max-w-2xl"
+        }
+      `}
+      >
+        Explore the breathtaking beauty of Raja Ampat
         {!isMobile && " through our collection"}
       </p>
     </motion.header>
@@ -98,16 +118,21 @@ function Header({ isMobile, isTablet }) {
 
 function GalleryFlex({ images, galleryRef, isMobile, isTablet }) {
   const isSmallDevice = isMobile || isTablet;
-  
+
   return (
-    <div className={`mx-auto ${isSmallDevice ? 'max-w-2xl' : 'max-w-7xl'}`}>
+    <div className={`mx-auto ${isSmallDevice ? "max-w-2xl" : "max-w-7xl"}`}>
       {/* Gallery Grid - Responsive for all devices */}
-      <div className={`
-        ${isMobile ? 'grid grid-cols-2 gap-3' : 
-          isTablet ? 'grid grid-cols-3 gap-4' : 
-          'flex flex-wrap justify-center gap-4 md:gap-5'} 
-        mb-6 sm:mb-8
-      `}>
+      <div
+        className={`
+        ${
+          isMobile
+            ? "grid grid-cols-2 gap-3"
+            : isTablet
+            ? "grid grid-cols-3 gap-4"
+            : "flex flex-wrap justify-center gap-4 md:gap-5"
+        } 
+      `}
+      >
         {images.map((img, idx) => (
           <motion.div
             key={idx}
@@ -122,7 +147,7 @@ function GalleryFlex({ images, galleryRef, isMobile, isTablet }) {
             className={`
               relative border border-white/70 rounded-lg overflow-hidden shadow-md 
               cursor-pointer hover:scale-105 transition-transform
-              ${!isSmallDevice && 'flex-shrink-0'}
+              ${!isSmallDevice && "flex-shrink-0"}
             `}
             onClick={() => galleryRef.current?.openGallery(idx)}
           >
@@ -131,11 +156,15 @@ function GalleryFlex({ images, galleryRef, isMobile, isTablet }) {
               alt={`Gallery Visual ${idx + 1}`}
               className={`
                 block 
-                ${isMobile ? 'h-32 w-full object-cover' : 
-                  isTablet ? 'h-48 w-full object-cover' : 
-                  'h-64 w-auto max-w-full object-contain'}
+                ${
+                  isMobile
+                    ? "h-32 w-full object-cover"
+                    : isTablet
+                    ? "h-48 w-full object-cover"
+                    : "h-64 w-auto max-w-full object-contain"
+                }
               `}
-              loading="lazy"
+              loading='lazy'
             />
             <div className='absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition duration-300' />
           </motion.div>
@@ -143,19 +172,19 @@ function GalleryFlex({ images, galleryRef, isMobile, isTablet }) {
       </div>
 
       {/* View All Button - Responsive sizing */}
-      <motion.div 
-        className="mt-4 sm:mt-6 mb-4 sm:mb-8 text-center"
+      <motion.div
+        className='mt-4 sm:mt-6 mb-4 sm:mb-8 text-center'
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.5, ease: "easeOut", delay: 0.6 }}
       >
-        <button 
+        <button
           onClick={() => galleryRef.current?.openGallery(0)}
           className={`
             bg-white/10 hover:bg-white/20 text-white border border-white/30 
             transition-all duration-300 font-[Gully] backdrop-blur-sm shadow-lg rounded-full
-            ${isMobile ? 'text-sm px-6 py-2' : 'px-8 py-3'}
+            ${isMobile ? "text-sm px-6 py-2" : "px-8 py-3"}
           `}
         >
           View All Photos

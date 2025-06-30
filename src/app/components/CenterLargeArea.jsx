@@ -34,11 +34,12 @@ export default function CenterLargeArea({ deviceSize }) {
         sm:py-7
         md:py-9
         lg:py-[32px]
-        mt-6
+        mt-8
+        gap-2
         sm:mt-10
         lg:mt-[56px]
         mb-2
-        sm:mb-3
+        sm:mb-2
         lg:mb-5
         border
         border-white

@@ -1,9 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import CenterLargeArea from "../components/CenterLargeArea";
 import LeftLowerSection from "../components/LeftLowerSection";
 import RightLowerSection from "../components/RightLowerSection";
-import { useEffect, useState } from "react";
 
 export default function About() {
   const [deviceSize, setDeviceSize] = useState("desktop");
@@ -20,7 +20,6 @@ export default function About() {
       }
     };
 
-    // Set initial value
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -31,22 +30,36 @@ export default function About() {
   return (
     <div
       id='about'
-      className='w-full flex flex-col gap-2 sm:gap-4 lg:gap-6 py-16 sm:py-24 lg:py-32 px-4 sm:px-6 relative'
+      className='
+        w-full max-w-screen-xl mx-auto
+        flex flex-col
+        items-center            // ✅ semua anak akan berada di tengah
+        gap-2 sm:gap-4 lg:gap-6
+        py-16 sm:py-24 lg:py-32
+        px-4 sm:px-6
+        pb-6
+        relative
+      '
     >
+      <CenterLargeArea deviceSize={deviceSize} />
+
       {isMobile ? (
         <>
-          <CenterLargeArea deviceSize={deviceSize} />
           <LeftLowerSection deviceSize={deviceSize} />
           <RightLowerSection deviceSize={deviceSize} />
         </>
       ) : (
-        <>
-          <CenterLargeArea deviceSize={deviceSize} />
-          <div className='w-full flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 sm:gap-8 lg:gap-10'>
-            <LeftLowerSection deviceSize={deviceSize} />
-            <RightLowerSection deviceSize={deviceSize} />
-          </div>
-        </>
+        <div
+          className='
+            w-full flex flex-col lg:flex-row
+            items-center lg:items-start
+            justify-center
+            gap-6 sm:gap-8 lg:gap-10
+          '
+        >
+          <LeftLowerSection deviceSize={deviceSize} />
+          <RightLowerSection deviceSize={deviceSize} />
+        </div>
       )}
     </div>
   );

@@ -32,7 +32,9 @@ export default function Navbar() {
     <div className='w-full flex flex-row items-start justify-evenly sticky top-0 z-50'>
       <TopWideSection isMobile={isMobile} isTablet={isTablet} />
       {/* Hide TopNarrowSection on mobile */}
-      {!isMobile && <TopNarrowSection isMobile={isMobile} isTablet={isTablet} />}
+      {!isMobile && (
+        <TopNarrowSection isMobile={isMobile} isTablet={isTablet} />
+      )}
     </div>
   );
 }

@@ -3,13 +3,18 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay, Navigation } from "swiper/modules";
-
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
 
-// Slide data array
+import LightGallery from "lightgallery/react";
+import lgThumbnail from "lightgallery/plugins/thumbnail";
+import lgZoom from "lightgallery/plugins/zoom";
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-thumbnail.css";
+import "lightgallery/css/lg-zoom.css";
+
 const slides = [
   {
     id: "arborek",
@@ -55,9 +60,7 @@ const slides = [
   },
 ];
 
-// Responsive Slide Content Component
 const SlideContent = ({ title, description, isMobile, isTablet }) => {
-  // For desktop (full screen)
   if (!isMobile && !isTablet) {
     return (
       <div className='relative h-full w-full flex flex-col justify-end pb-24 px-16 bg-black/40'>
@@ -71,7 +74,6 @@ const SlideContent = ({ title, description, isMobile, isTablet }) => {
     );
   }
 
-  // For mobile and tablet (card layout)
   return (
     <div className='absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-[2px] p-4 sm:p-6'>
       <h2 className='text-white font-[Gully] font-normal text-2xl sm:text-3xl leading-tight mb-1 sm:mb-2'>
@@ -99,8 +101,6 @@ export default function TopDestination() {
         setDeviceSize("desktop");
       }
     };
-
-    // Set initial value
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -110,110 +110,81 @@ export default function TopDestination() {
   const isTablet = deviceSize === "tablet";
   const isSmallDevice = isMobile || isTablet;
 
-  // Navigation function
-  const navigateToSlide = (slideId) => {
-    if (!swiperRef.current || !swiperRef.current.swiper) {
-      console.error("Swiper not initialized yet!");
-      return;
-    }
+  const galleryItems = slides.map((s) => ({
+    src: s.background,
+    thumb: s.background,
+    subHtml: `<h4>${s.title}</h4><p>${s.description}</p>`,
+  }));
 
-    const slideIndex = slides.findIndex((slide) => slide.id === slideId);
-    if (slideIndex >= 0) {
-      console.log(`Navigating to slide: ${slideId} at index ${slideIndex}`);
-      swiperRef.current.swiper.slideTo(slideIndex);
-      return true;
-    } else {
-      console.warn(`No slide found with ID: ${slideId}`);
-      return false;
-    }
-  };
-
-  useEffect(() => {
-    // Expose the navigation function globally
-    window.navigateToSlide = navigateToSlide;
-
-    return () => {
-      delete window.navigateToSlide;
-    };
-  }, []);
-
-  return (
-    <div
-      id='top-destination'
-      className={`${isSmallDevice ? 'min-h-[80vh] py-8 sm:py-12' : 'h-screen'} w-full`}
-    >
-      {isSmallDevice && (
-        <div className="px-4 sm:px-6 mb-6 sm:mb-8">
-          <h2 className="text-white font-[Gully] font-normal text-3xl sm:text-4xl mb-2">
+  if (isSmallDevice) {
+    return (
+      <div
+        id='top-destination'
+        className='min-h-[80vh] py-8 sm:py-12 w-full px-4 sm:px-6'
+      >
+        <div className='mt-16 px-4 sm:px-6 mb-6 sm:mb-8'>
+          <h2 className='text-white font-[Gully] font-normal text-3xl sm:text-4xl mb-2'>
             Top Destination
           </h2>
-          <p className="text-white font-[Gully] font-light text-lg sm:text-xl">
+          <p className='text-white font-[Gully] font-light text-lg sm:text-xl'>
             Explore the best of Raja Ampat
           </p>
         </div>
-      )}
 
+        <LightGallery
+          plugins={[lgThumbnail, lgZoom]}
+          dynamic
+          dynamicEl={galleryItems}
+        >
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+            {slides.map((slide) => (
+              <a
+                key={slide.id}
+                href={slide.background}
+                className='relative block h-[260px] sm:h-[320px] w-full bg-cover bg-center rounded-xl overflow-hidden shadow-lg'
+                data-lg-size='1400-800'
+                data-sub-html={`<h4>${slide.title}</h4><p>${slide.description}</p>`}
+                style={{ backgroundImage: `url(${slide.background})` }}
+              >
+                <div className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent'></div>
+                <SlideContent
+                  title={slide.title}
+                  description={slide.description}
+                  isMobile={isMobile}
+                  isTablet={isTablet}
+                />
+              </a>
+            ))}
+          </div>
+        </LightGallery>
+      </div>
+    );
+  }
+
+  return (
+    <div id='top-destination' className='h-screen w-full'>
       <Swiper
         ref={swiperRef}
-        direction={isSmallDevice ? 'horizontal' : 'vertical'}
-        pagination={{
-          clickable: true,
-          dynamicBullets: isSmallDevice,
-        }}
-        navigation={isTablet}
+        direction='vertical'
+        pagination={{ clickable: true }}
+        navigation
         modules={[Pagination, Autoplay, Navigation]}
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false,
-        }}
-        breakpoints={isSmallDevice ? {
-          // Mobile breakpoints
-          0: {
-            slidesPerView: 1.2,
-            spaceBetween: 16,
-            centeredSlides: false,
-          },
-          640: {
-            slidesPerView: 2.2,
-            spaceBetween: 20,
-          },
-          768: {
-            slidesPerView: 2.5,
-            spaceBetween: 24,
-          }
-        } : {}}
-        className={`${isSmallDevice ? 'destination-card-swiper px-4 sm:px-6' : 'h-full w-full swiper-container'}`}
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        className='h-full w-full swiper-container'
       >
-        {slides.map((slide, index) => (
-          <SwiperSlide key={index} id={`slide-${slide.id}`}>
-            {isSmallDevice ? (
-              // Card layout for mobile and tablet
-              <div
-                className="h-[260px] sm:h-[320px] w-full bg-cover bg-center rounded-xl overflow-hidden relative shadow-lg"
-                style={{ backgroundImage: `url(${slide.background})` }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <SlideContent
-                  title={slide.title}
-                  description={slide.description}
-                  isMobile={isMobile}
-                  isTablet={isTablet}
-                />
-              </div>
-            ) : (
-              // Full screen layout for desktop
-              <div
-                className='h-full w-full bg-cover bg-center relative'
-                style={{ backgroundImage: `url(${slide.background})` }}
-              >
-                <SlideContent
-                  title={slide.title}
-                  description={slide.description}
-                  isMobile={isMobile}
-                  isTablet={isTablet}
-                />
-              </div>
-            )}
+        {slides.map((slide) => (
+          <SwiperSlide key={slide.id}>
+            <div
+              className='h-full w-full bg-cover bg-center relative'
+              style={{ backgroundImage: `url(${slide.background})` }}
+            >
+              <SlideContent
+                title={slide.title}
+                description={slide.description}
+                isMobile={false}
+                isTablet={false}
+              />
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>

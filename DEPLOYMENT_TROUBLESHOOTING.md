@@ -27,8 +27,10 @@ pnpm install --frozen-lockfile
 ## 🚨 Common Vercel Deployment Issues
 
 ### Issue 1: Package/Lockfile Mismatch
+
 **Symptoms:** "Cannot find module" or dependency resolution errors
 **Solution:**
+
 ```bash
 pnpm install
 git add pnpm-lock.yaml
@@ -37,19 +39,24 @@ git push origin main
 ```
 
 ### Issue 2: Node Version Mismatch
+
 **Symptoms:** Build fails with Node.js version errors
 **Current config:** Node 20 (specified in vercel.json)
 **Solution:** Vercel.json already configured with Node 20
 
 ### Issue 3: Build Command Issues
+
 **Symptoms:** Build process fails or times out
 **Current config:**
+
 - Build: `pnpm build`
 - Install: `pnpm install --frozen-lockfile=false`
 - Framework: Next.js (auto-detected)
 
 ### Issue 4: Environment Variables
+
 **Check in Vercel dashboard:**
+
 - `NEXTAUTH_SECRET`
 - `NEXTAUTH_URL`
 - `SUPABASE_URL`
@@ -59,12 +66,14 @@ git push origin main
 ## 📋 Deployment Checklist
 
 ### Before Each Deployment:
+
 - [ ] Local build passes (`pnpm build`)
 - [ ] All changes committed and pushed
 - [ ] Environment variables set in Vercel
 - [ ] Dependencies in sync (lockfile updated)
 
 ### If Deployment Fails:
+
 1. **Check Vercel build logs** in dashboard
 2. **Compare with local build** output
 3. **Verify environment variables** are set
@@ -74,6 +83,7 @@ git push origin main
 ## 🔧 Quick Fixes
 
 ### Reset Dependencies:
+
 ```bash
 rm -rf node_modules pnpm-lock.yaml
 pnpm install
@@ -84,11 +94,13 @@ git push origin main
 ```
 
 ### Force Vercel Rebuild:
+
 1. Go to Vercel dashboard
 2. Find your deployment
 3. Click "Redeploy" with clear cache option
 
 ### Update Vercel CLI (if needed):
+
 ```bash
 npm i -g vercel@latest
 vercel --version

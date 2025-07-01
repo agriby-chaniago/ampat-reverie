@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import UserMenu from "./UserMenu";
@@ -15,11 +16,19 @@ export default function TopWideSection({ isMobile, isTablet }) {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className={`
         flex items-center justify-between
-        ${isMobile ? "w-full mx-3" : isTablet ? "w-[500px]" : "w-[1044px]"}
-        ${isMobile ? "h-[70px]" : isTablet ? "h-[85px]" : "h-[102px]"}
+        ${
+          isMobile ? "w-full mx-3" : isTablet ? "w-[500px]" : "w-[1044px]"
+        } // Menyesuaikan ukuran lebar berdasarkan perangkat
+        ${
+          isMobile ? "h-[70px]" : isTablet ? "h-[85px]" : "h-[102px]"
+        } // Menyesuaikan tinggi header
         bg-white shadow-lg rounded-2xl
-        ${isMobile ? "px-3 py-2" : isTablet ? "px-4 py-3" : "px-6 py-4"}
-        ${isMobile ? "mt-[15px]" : isTablet ? "mt-[40px]" : "mt-[64px]"}
+        ${
+          isMobile ? "px-3 py-2" : isTablet ? "px-4 py-3" : "px-6 py-4"
+        } // Padding responsif
+        ${
+          isMobile ? "mt-[15px]" : isTablet ? "mt-[40px]" : "mt-[64px]"
+        } // Margin responsif
         z-50
         relative
       `}
@@ -43,14 +52,14 @@ export default function TopWideSection({ isMobile, isTablet }) {
                   : isTablet
                   ? "w-[70px] h-[70px]"
                   : "w-[175px] h-[175px]"
-              }
+              } // Ukuran logo responsif
               cursor-pointer
             `}
           />
         </button>
       </div>
 
-      {/* Hamburger for mobile, nav for tablet/desktop */}
+      {/* Hamburger Menu untuk perangkat mobile */}
       {isMobile ? (
         <div>
           <button
@@ -61,6 +70,7 @@ export default function TopWideSection({ isMobile, isTablet }) {
             <Menu size={28} />
           </button>
 
+          {/* Menu yang muncul ketika tombol hamburger ditekan */}
           <AnimatePresence>
             {open && (
               <motion.div
@@ -107,14 +117,17 @@ export default function TopWideSection({ isMobile, isTablet }) {
           </AnimatePresence>
         </div>
       ) : (
+        // Menu untuk tablet dan desktop
         <div className='flex items-center'>
           <nav
             className={`
               flex
-              ${isTablet ? "space-x-3" : "space-x-6"}
+              ${
+                isTablet ? "space-x-3" : "space-x-6"
+              } // Menyesuaikan jarak antar item
               text-gray-800
               font-medium
-              ${isTablet ? "text-sm" : "text-lg"}
+              ${isTablet ? "text-sm" : "text-lg"} // Ukuran font responsif
             `}
           >
             <a href='#about' className='hover:text-[#107773] transition-colors'>
@@ -139,9 +152,6 @@ export default function TopWideSection({ isMobile, isTablet }) {
               Gallery
             </a>
           </nav>
-          {/* <div className='ml-3'>
-            <UserMenu isMobile={isMobile} isTablet={isTablet} />
-          </div> */}
         </div>
       )}
     </motion.div>

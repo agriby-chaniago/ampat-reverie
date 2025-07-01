@@ -11,42 +11,12 @@ export default function CenterLargeArea({ deviceSize }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       className={`
-        flex
-        flex-col
-        lg:flex-row
-        items-start lg:items-center
-        w-full
-        lg:w-[1816px]
-        h-auto
-        min-h-[240px] sm:min-h-[260px] lg:min-h-[280px]
-        max-w-full
-        mx-auto
-        bg-transparent
-        backdrop-blur-xs
-        rounded-[12px]
-        sm:rounded-[16px]
-        lg:rounded-[20px]
-        px-5
-        sm:px-8
-        md:px-10
-        lg:px-[52px]
-        py-4
-        sm:py-7
-        md:py-9
-        lg:py-[32px]
-        mt-8
-        gap-2
-        sm:mt-10
-        lg:mt-[56px]
-        mb-2
-        sm:mb-2
-        lg:mb-5
-        border
-        border-white
-        overflow-hidden
-        shadow-md
-        z-10
-        relative
+        flex flex-col lg:flex-row items-start lg:items-center w-full
+        max-w-full mx-auto min-h-[240px] sm:min-h-[260px] lg:min-h-[280px]
+        bg-transparent backdrop-blur-xs rounded-[12px] sm:rounded-[16px] lg:rounded-[20px]
+        px-5 sm:px-8 md:px-10 lg:px-[52px] py-4 sm:py-7 md:py-9 lg:py-[32px]
+        mt-8 sm:mt-10 lg:mt-[56px] mb-2 sm:mb-2 lg:mb-5 border border-white overflow-hidden shadow-md z-10 relative
+        lg:max-w-none lg:w-full  {/* Allow full width on desktop */}
       `}
     >
       <div className='flex-1 flex flex-col justify-start lg:pr-6'>
@@ -64,11 +34,7 @@ export default function CenterLargeArea({ deviceSize }) {
       </div>
 
       <div className='w-full lg:w-[480px] h-auto lg:h-[300px] flex items-start justify-start mt-3 sm:mt-5 lg:mt-8 mr-0 lg:mr-4'>
-        <p
-          className='text-white font-[Gully] font-light
-          text-base sm:text-lg md:text-2xl lg:text-[48px]
-          leading-tight tracking-tight text-center lg:text-left'
-        >
+        <p className='text-white font-[Gully] font-light text-base sm:text-lg md:text-2xl lg:text-[48px] leading-tight tracking-tight text-center lg:text-left'>
           Discover the crown jewel of marine biodiversity where pristine nature
           meets ancient culture
         </p>

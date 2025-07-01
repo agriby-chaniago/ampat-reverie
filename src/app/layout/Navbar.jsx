@@ -29,11 +29,26 @@ export default function Navbar() {
   const isTablet = deviceSize === "tablet";
 
   return (
-    <div className='w-full flex flex-row items-start justify-evenly sticky top-0 z-50'>
+    <div
+      className='
+        w-full
+        flex
+        flex-col lg:flex-row
+        items-center lg:items-start
+        justify-center lg:justify-evenly
+        gap-8 lg:gap-4
+        px-4 sm:px-6 lg:px-8
+        sticky top-0 z-50
+      '
+    >
+      {/* TopWideSection akan ditampilkan di semua ukuran layar */}
       <TopWideSection isMobile={isMobile} isTablet={isTablet} />
-      {/* Hide TopNarrowSection on mobile */}
+
+      {/* TopNarrowSection hanya ditampilkan di tablet dan desktop, disembunyikan pada mobile */}
       {!isMobile && (
-        <TopNarrowSection isMobile={isMobile} isTablet={isTablet} />
+        <div>
+          <TopNarrowSection isMobile={isMobile} isTablet={isTablet} />
+        </div>
       )}
     </div>
   );

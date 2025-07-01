@@ -11,7 +11,7 @@ export default function Ampat() {
         flex
         flex-col lg:flex-row
         items-center lg:items-start
-        justify-center lg:justify-evenly
+        justify-evenly lg:justify-evenly
         py-6 sm:py-8 lg:py-12
         gap-8 lg:gap-4
         px-4 sm:px-6 lg:px-8
@@ -19,6 +19,7 @@ export default function Ampat() {
       '
     >
       <LeftLargeArea />
+      {/* Kontainer untuk RightTop dan RightLow */}
       <div className='flex flex-col gap-6 sm:gap-8 lg:gap-11 w-full lg:w-auto'>
         <RightTop />
         <RightLow />

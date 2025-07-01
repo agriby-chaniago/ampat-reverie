@@ -18,6 +18,8 @@ export default function FeedbackPopup() {
   const [isLoading, setIsLoading] = useState(false);
   const [editMode, setEditMode] = useState(false); // Mode edit untuk feedback yang sudah ada
   const [feedbackChecked, setFeedbackChecked] = useState(false); // Menandai jika sudah cek feedback
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [scrollDirection, setScrollDirection] = useState('down');
 
   // Tambahkan effect untuk mendeteksi perubahan status autentikasi
   useEffect(() => {
@@ -102,25 +104,45 @@ export default function FeedbackPopup() {
   useEffect(() => {
     if (status !== "authenticated") return;
     
-    // Function to check if user scrolled to bottom
+    // Function to check scroll direction and position
     const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-        // Aktifkan tombol saat scroll ke bawah
+      const currentScrollY = window.scrollY;
+      const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 50;
+      
+      // Determine scroll direction
+      if (currentScrollY > lastScrollY) {
+        setScrollDirection('down');
+      } else if (currentScrollY < lastScrollY) {
+        setScrollDirection('up');
+      }
+      
+      setLastScrollY(currentScrollY);
+      
+      // Only show feedback when scrolled to bottom AND scrolling down
+      if (scrolledToBottom && scrollDirection === 'down') {
+        // Aktifkan tombol saat scroll ke bawah dan mencapai bottom
         setIsVisible(true);
         
-        // Tampilkan popup otomatis saat scroll ke bawah
-        // Baik untuk user yang sudah memiliki feedback atau belum
+        // Tampilkan popup otomatis saat scroll ke bawah mencapai bottom
         if (!showPopup) {
           setTimeout(() => {
             setShowPopup(true);
           }, 1000);
+        }
+      } else {
+        // Sembunyikan tombol dan popup saat scroll ke atas atau tidak di bottom
+        setIsVisible(false);
+        
+        // Tutup popup jika sedang terbuka dan user scroll ke atas
+        if (showPopup && scrollDirection === 'up') {
+          setShowPopup(false);
         }
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [status, showPopup, userFeedback]); // Selalu sertakan userFeedback
+  }, [status, showPopup, lastScrollY, scrollDirection]);
 
   const handleClose = () => {
     setShowPopup(false);
@@ -201,8 +223,8 @@ export default function FeedbackPopup() {
     }
   };
 
-  // Update logic for the button visibility - SELALU tampilkan tombol jika ada feedback
-  const shouldShowButton = status === "authenticated" && (isVisible || userFeedback);
+  // Update the button visibility logic
+  const shouldShowButton = status === "authenticated" && isVisible && scrollDirection === 'down';
 
   // Don't render anything if user is not authenticated
   if (status !== "authenticated") return null;

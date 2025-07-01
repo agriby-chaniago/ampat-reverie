@@ -238,7 +238,7 @@ export default function GalleryVisual() {
     <motion.section
       ref={ref}
       id='gallery'
-      className='w-full py-12 sm:py-16 md:py-24 lg:py-44 px-4 sm:px-6 md:px-8'
+      className='w-full py-12 sm:py-16 md:py-24 lg:py-44 px-4 sm:px-6 md:px-8 relative'
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.8, ease: "easeOut" }}

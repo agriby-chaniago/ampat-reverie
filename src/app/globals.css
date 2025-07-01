@@ -21,4 +21,5 @@ body {
 
 .animate-shimmer {
   animation: shimmer 2s infinite linear;
+  -webkit-animation: shimmer 2s infinite linear;
 }

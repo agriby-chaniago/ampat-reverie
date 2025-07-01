@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install --frozen-lockfile=false",
+  "devCommand": "pnpm dev",
+  "framework": "nextjs",
+  "env": {
+    "NODE_VERSION": "20"
+  },
+  "functions": {
+    "app/api/**/*.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}

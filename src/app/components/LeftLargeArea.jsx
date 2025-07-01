@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useSupabase } from "../providers/SupabaseProvider";
+import { useLazyLoad } from "../hooks/useLazyLoad";
+import { LazyLoadingSkeleton, TextSkeleton } from "./LazyLoadingSkeleton";
 
 const ANIMATION_CONFIG = {
   initial: { opacity: 0, y: 20 },
@@ -10,23 +12,33 @@ const ANIMATION_CONFIG = {
   transition: { duration: 0.8, ease: "easeOut" },
 };
 
-const HeroTitle = () => (
+const HeroTitle = ({ isInView }) => (
   <div className='max-w-[596px]'>
-    <h1 className='font-[Gully] font-bold text-5xl sm:text-6xl md:text-7xl lg:text-[100px] leading-[1.1] tracking-[-0.05em] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]'>
-      AMPAT <br /> REVERIE
-    </h1>
+    <LazyLoadingSkeleton isLoaded={isInView}>
+      <h1 className='font-[Gully] font-bold text-5xl sm:text-6xl md:text-7xl lg:text-[100px] leading-[1.1] tracking-[-0.05em] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]'>
+        AMPAT <br /> REVERIE
+      </h1>
+    </LazyLoadingSkeleton>
+    {!isInView && (
+      <TextSkeleton lines={2} className='h-20 sm:h-24 md:h-28 lg:h-32' />
+    )}
   </div>
 );
 
-const HeroDescription = () => (
+const HeroDescription = ({ isInView }) => (
   <div className='max-w-[662px]'>
-    <p className='font-[Gully] font-normal text-lg sm:text-xl md:text-2xl lg:text-[26px] leading-[1.5] text-white'>
-      A glimpse of paradise from the edge of the world.
-    </p>
+    <LazyLoadingSkeleton isLoaded={isInView}>
+      <p className='font-[Gully] font-normal text-lg sm:text-xl md:text-2xl lg:text-[26px] leading-[1.5] text-white'>
+        A glimpse of paradise from the edge of the world.
+      </p>
+    </LazyLoadingSkeleton>
+    {!isInView && (
+      <TextSkeleton lines={1} className='h-8 sm:h-10 md:h-12 lg:h-8' />
+    )}
   </div>
 );
 
-const RatingSection = ({ rating, explorerCount, isLoading }) => {
+const RatingSection = ({ rating, explorerCount, isLoading, isInView }) => {
   const formatExplorerCount = (count) => {
     if (count >= 10000) {
       return `${(count / 1000).toFixed(1)}k+`;
@@ -40,24 +52,35 @@ const RatingSection = ({ rating, explorerCount, isLoading }) => {
 
   return (
     <div className='w-full flex justify-start mt-6 sm:mt-0'>
-      <p className='font-[Gully] font-normal text-2xl sm:text-3xl md:text-4xl lg:text-[40px] leading-[1.4] text-white'>
-        {isLoading ? (
-          <span className='animate-pulse'>Loading...</span>
-        ) : (
-          <>
-            {formatRating(rating)}/5 |{" "}
-            <span className='text-xl sm:text-2xl md:text-2xl lg:text-[28px] text-white'>
-              {formatExplorerCount(explorerCount)} explorers
-            </span>
-          </>
-        )}
-      </p>
+      <LazyLoadingSkeleton isLoaded={isInView}>
+        <p className='font-[Gully] font-normal text-2xl sm:text-3xl md:text-4xl lg:text-[40px] leading-[1.4] text-white'>
+          {isLoading ? (
+            <span className='animate-pulse'>Loading...</span>
+          ) : (
+            <>
+              {formatRating(rating)}/5 |{" "}
+              <span className='text-xl sm:text-2xl md:text-2xl lg:text-[28px] text-white'>
+                {formatExplorerCount(explorerCount)} explorers
+              </span>
+            </>
+          )}
+        </p>
+      </LazyLoadingSkeleton>
+      {!isInView && (
+        <TextSkeleton lines={1} className='h-10 sm:h-12 md:h-16 lg:h-12 w-64' />
+      )}
     </div>
   );
 };
 
 export default function LeftLargeArea() {
   const supabase = useSupabase();
+  const { ref, isInView } = useLazyLoad({
+    threshold: 0.1,
+    rootMargin: "100px 0px",
+    triggerOnce: true,
+  });
+
   const [ratingData, setRatingData] = useState({
     averageRating: 4.93,
     totalExplorers: 32000,
@@ -65,6 +88,9 @@ export default function LeftLargeArea() {
   });
 
   useEffect(() => {
+    // Only fetch data when component is in view
+    if (!isInView) return;
+
     const fetchRatingData = async () => {
       try {
         const { data, error } = await supabase
@@ -114,22 +140,28 @@ export default function LeftLargeArea() {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [isInView, supabase]);
 
   const containerClasses =
     "flex flex-col justify-between w-full lg:w-[1044px] h-auto min-h-[300px] sm:min-h-[420px] lg:h-[724px] bg-white/5 backdrop-blur-xs shadow-lg rounded-[12px] sm:rounded-[16px] lg:rounded-[20px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 border border-white";
 
+  // Apply lazy load animation only when in view
+  const animationConfig = isInView
+    ? ANIMATION_CONFIG
+    : { initial: { opacity: 0, y: 20 } };
+
   return (
-    <motion.div {...ANIMATION_CONFIG} className={containerClasses}>
+    <motion.div ref={ref} {...animationConfig} className={containerClasses}>
       <div className='flex flex-col items-center text-center space-y-3 sm:space-y-4 lg:space-y-6 mt-8 sm:mt-12 lg:mt-20'>
-        <HeroTitle />
-        <HeroDescription />
+        <HeroTitle isInView={isInView} />
+        <HeroDescription isInView={isInView} />
       </div>
 
       <RatingSection
         rating={ratingData.averageRating}
         explorerCount={ratingData.totalExplorers}
         isLoading={ratingData.isLoading}
+        isInView={isInView}
       />
     </motion.div>
   );

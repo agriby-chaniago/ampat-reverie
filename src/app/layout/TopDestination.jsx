@@ -2,11 +2,10 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, Navigation } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-import "swiper/css/navigation";
 
 import LightGallery from "lightgallery/react";
 import lgThumbnail from "lightgallery/plugins/thumbnail";
@@ -113,7 +112,7 @@ export default function TopDestination() {
   const galleryItems = slides.map((s) => ({
     src: s.background,
     thumb: s.background,
-    subHtml: `<h4>${s.title}</h4><p>${s.description}</p>`,
+    subHtml: `${s.title} - ${s.description}`,
   }));
 
   if (isSmallDevice) {
@@ -143,7 +142,7 @@ export default function TopDestination() {
                 href={slide.background}
                 className='relative block h-[260px] sm:h-[320px] w-full bg-cover bg-center rounded-xl overflow-hidden shadow-lg'
                 data-lg-size='1400-800'
-                data-sub-html={`<h4>${slide.title}</h4><p>${slide.description}</p>`}
+                data-sub-html={`${slide.title} - ${slide.description}`}
                 style={{ backgroundImage: `url(${slide.background})` }}
               >
                 <div className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent'></div>
@@ -167,8 +166,7 @@ export default function TopDestination() {
         ref={swiperRef}
         direction='vertical'
         pagination={{ clickable: true }}
-        navigation
-        modules={[Pagination, Autoplay, Navigation]}
+        modules={[Pagination, Autoplay]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
         className='h-full w-full swiper-container'
       >

@@ -5,7 +5,7 @@ import CenterLargeArea from "../components/CenterLargeArea";
 import LeftLowerSection from "../components/LeftLowerSection";
 import RightLowerSection from "../components/RightLowerSection";
 
-export default function About() {
+const useDeviceSize = () => {
   const [deviceSize, setDeviceSize] = useState("desktop");
 
   useEffect(() => {
@@ -25,28 +25,23 @@ export default function About() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const isMobile = deviceSize === "mobile";
+  return deviceSize;
+};
+
+export default function About() {
+  const deviceSize = useDeviceSize();
 
   return (
-    <div
-      id='about'
-      className='w-full max-w-screen-xl mx-auto flex flex-col items-center gap-2 sm:gap-4 lg:gap-6 py-16 sm:py-24 lg:py-32 px-4 sm:px-6 pb-6 relative'
+    <section
+      id="about"
+      className="w-full mx-auto flex flex-col items-center gap-2 sm:gap-4 lg:gap-6 py-16 sm:py-24 lg:py-32 px-2 sm:px-4 lg:px-6 relative"
     >
-      {/* Menampilkan CenterLargeArea dengan ukuran lebar penuh di desktop */}
       <CenterLargeArea deviceSize={deviceSize} />
 
-      {/* Menampilkan LeftLowerSection dan RightLowerSection secara responsif */}
-      <div
-        className={`
-          w-full
-          flex flex-col lg:flex-row 
-          items-center lg:items-start
-          justify-center gap-6 sm:gap-8 lg:gap-10
-        `}
-      >
+      <div className="w-full grid lg:grid-cols-[56%_38%] justify-evently items-start gap-6 sm:gap-8 lg:gap-18">
         <LeftLowerSection deviceSize={deviceSize} />
         <RightLowerSection deviceSize={deviceSize} />
       </div>
-    </div>
+    </section>
   );
 }

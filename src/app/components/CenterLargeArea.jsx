@@ -11,12 +11,22 @@ export default function CenterLargeArea({ deviceSize }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       className={`
-        flex flex-col lg:flex-row items-start lg:items-center w-full
-        max-w-full mx-auto min-h-[240px] sm:min-h-[260px] lg:min-h-[280px]
-        bg-transparent backdrop-blur-xs rounded-[12px] sm:rounded-[16px] lg:rounded-[20px]
-        px-5 sm:px-8 md:px-10 lg:px-[52px] py-4 sm:py-7 md:py-9 lg:py-[32px]
-        mt-8 sm:mt-10 lg:mt-[56px] mb-2 sm:mb-2 lg:mb-5 border border-white overflow-hidden shadow-md z-10 relative
-        lg:max-w-none lg:w-full  {/* Allow full width on desktop */}
+        flex flex-col lg:flex-row items-start lg:items-center
+        ${
+          isMobile 
+            ? "w-full max-w-full mx-3" 
+            : isTablet 
+              ? "w-full max-w-[750px] mx-auto" 
+              : "w-full max-w-[1800px] mx-auto"
+        }
+        min-h-[240px] sm:min-h-[260px] lg:min-h-[280px]
+        bg-transparent backdrop-blur-xs 
+        rounded-[12px] sm:rounded-[16px] lg:rounded-[20px]
+        px-5 sm:px-8 md:px-10 lg:px-[52px] 
+        py-4 sm:py-7 md:py-9 lg:py-[32px]
+        mt-8 sm:mt-10 lg:mt-[56px] 
+        mb-2 sm:mb-2 lg:mb-5 
+        border border-white overflow-hidden shadow-md z-10 relative
       `}
     >
       <div className='flex-1 flex flex-col justify-start lg:pr-6'>

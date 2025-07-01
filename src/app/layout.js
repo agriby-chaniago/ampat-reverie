@@ -1,7 +1,9 @@
 import "./globals.css";
 import localFont from "next/font/local";
 import AuthProvider from "./providers/AuthProvider";
+import { SupabaseProvider } from "./providers/SupabaseProvider";
 import FeedbackPopup from "./components/feedback/FeedbackPopup";
+import { ConsoleOptimizer } from "./components/ConsoleOptimizer";
 
 const Gully = localFont({
   src: "./fonts/Gully/Gully-ECDRegular.ttf",
@@ -20,10 +22,13 @@ export default function RootLayout({ children }) {
       <body
         className={`${Gully.className} antialiased min-h-screen bg-background text-foreground`}
       >
-        <AuthProvider>
-          {children}
-          <FeedbackPopup />
-        </AuthProvider>
+        <ConsoleOptimizer />
+        <SupabaseProvider>
+          <AuthProvider>
+            {children}
+            <FeedbackPopup />
+          </AuthProvider>
+        </SupabaseProvider>
       </body>
     </html>
   );

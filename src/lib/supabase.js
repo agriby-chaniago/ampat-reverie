@@ -14,8 +14,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error("Missing Supabase environment variables");
 }
 
+// Legacy export for backward compatibility - DEPRECATED: use useSupabase() hook instead
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// Server-side admin instance - only for API routes
 export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   auth: { persistSession: false },
 });

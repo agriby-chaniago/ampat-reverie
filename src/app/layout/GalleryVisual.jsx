@@ -213,6 +213,40 @@ export default function GalleryVisual() {
         dynamicEl={dynamicEl}
         plugins={[lgThumbnail, lgZoom]}
         mode='lg-fade'
+        speed={500}
+        licenseKey={
+          process.env.NEXT_PUBLIC_LIGHTGALLERY_LICENSE_KEY ||
+          "0000-0000-000-0000"
+        }
+        settings={{
+          selector: undefined,
+          download: false,
+          controls: true,
+          preload: 2,
+          hideControlOnEnd: false,
+          mousewheel: true,
+          getCaptionFromTitleOrAlt: false,
+          appendSubHtmlTo: ".lg-sub-html",
+          subHtmlSelectorRelative: false,
+          thumbWidth: 100,
+          thumbHeight: "80px",
+          thumbMargin: 5,
+          thumbnail: true,
+          showThumbByDefault: true,
+          toogleThumb: true,
+          pullCaptionUp: true,
+          enableThumbDrag: true,
+          enableThumbSwipe: true,
+          thumbnailPluginStrings: {
+            toggleThumbnails: "Toggle thumbnails",
+          },
+          zoom: true,
+          scale: 1,
+          zoom_speed: 400,
+          actualSize: true,
+          enableZoomAfter: 300,
+          useLeftForZoom: true,
+        }}
       />
     </section>
   );

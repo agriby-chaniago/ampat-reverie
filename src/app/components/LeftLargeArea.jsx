@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { supabase } from "../../lib/supabase";
+import { useSupabase } from "../providers/SupabaseProvider";
 
 const ANIMATION_CONFIG = {
   initial: { opacity: 0, y: 20 },
@@ -57,6 +57,7 @@ const RatingSection = ({ rating, explorerCount, isLoading }) => {
 };
 
 export default function LeftLargeArea() {
+  const supabase = useSupabase();
   const [ratingData, setRatingData] = useState({
     averageRating: 4.93,
     totalExplorers: 32000,

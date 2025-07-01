@@ -24,12 +24,16 @@ const Description = () => (
   </p>
 );
 
-export default function RightTop() {
+export default function RightTop({ isVisible = true }) {
   const containerClasses =
     "flex flex-col justify-center gap-3 sm:gap-4 lg:gap-6 w-full lg:w-[716px] h-auto min-h-[200px] sm:min-h-[250px] lg:h-[320px] bg-gradient-to-b from-white/0 to-white shadow rounded-[12px] sm:rounded-[16px] lg:rounded-[20px] px-4 sm:px-6 lg:px-8 py-5 sm:py-6 lg:py-8 border border-white";
 
+  const animationConfig = isVisible
+    ? ANIMATION_CONFIG
+    : { initial: { opacity: 0, y: 20 } };
+
   return (
-    <motion.div {...ANIMATION_CONFIG} className={containerClasses}>
+    <motion.div {...animationConfig} className={containerClasses}>
       <div className='flex flex-col gap-2 sm:gap-3 lg:gap-4 max-w-full sm:max-w-[500px]'>
         <Title />
         <Description />

@@ -32,12 +32,16 @@ const CallToActionButton = () => (
   </div>
 );
 
-export default function RightBottom() {
+export default function RightBottom({ isVisible = true }) {
   const containerClasses =
     "flex flex-col items-stretch justify-between w-full lg:w-[716px] h-auto min-h-[220px] sm:min-h-[280px] lg:h-[360px] bg-white bg-opacity-70 shadow rounded-[12px] sm:rounded-[16px] lg:rounded-[20px] px-4 sm:px-6 lg:px-8 py-5 sm:py-7 lg:py-10 border border-white";
 
+  const animationConfig = isVisible
+    ? ANIMATION_CONFIG
+    : { initial: { opacity: 0, y: 20 } };
+
   return (
-    <motion.div {...ANIMATION_CONFIG} className={containerClasses}>
+    <motion.div {...animationConfig} className={containerClasses}>
       <Header />
       <CallToActionButton />
     </motion.div>

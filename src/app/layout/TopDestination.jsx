@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -13,6 +14,12 @@ import lgZoom from "lightgallery/plugins/zoom";
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-thumbnail.css";
 import "lightgallery/css/lg-zoom.css";
+
+import { useLazyLoad } from "../hooks/useLazyLoad";
+import {
+  LazyLoadingSkeleton,
+  ImageSkeleton,
+} from "../components/LazyLoadingSkeleton";
 
 const BREAKPOINTS = {
   MOBILE: 640,
@@ -92,124 +99,262 @@ const useDeviceSize = () => {
   return deviceSize;
 };
 
-const DesktopSlideContent = ({ title, description }) => (
+const DesktopSlideContent = ({ title, description, isVisible = true }) => (
   <div className='relative h-full w-full flex flex-col justify-end pb-24 px-16 bg-black/40'>
-    <h2 className='text-white font-[Gully] font-normal text-[100px] leading-[100px] max-w-[800px] mb-[30px]'>
+    <motion.h2
+      className='text-white font-[Gully] font-normal text-[100px] leading-[100px] max-w-[800px] mb-[30px]'
+      initial={{ opacity: 0, y: 50 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
       {title}
-    </h2>
-    <p className='text-white font-[Gully] font-light mt-[15px] text-[45px] leading-[55px] max-w-[756px]'>
+    </motion.h2>
+    <motion.p
+      className='text-white font-[Gully] font-light mt-[15px] text-[45px] leading-[55px] max-w-[756px]'
+      initial={{ opacity: 0, y: 30 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+    >
       {description}
-    </p>
+    </motion.p>
   </div>
 );
 
-const MobileSlideContent = ({ title, description }) => (
-  <div className='absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-[2px] p-4 sm:p-6'>
-    <h2 className='text-white font-[Gully] font-normal text-2xl sm:text-3xl leading-tight mb-1 sm:mb-2'>
+const MobileSlideContent = ({ title, description, isVisible = true }) => (
+  <motion.div
+    className='absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-[2px] p-4 sm:p-6'
+    initial={{ opacity: 0, y: 20 }}
+    animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+    transition={{ duration: 0.6, ease: "easeOut" }}
+  >
+    <motion.h2
+      className='text-white font-[Gully] font-normal text-2xl sm:text-3xl leading-tight mb-1 sm:mb-2'
+      initial={{ opacity: 0, x: -20 }}
+      animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+      transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+    >
       {title}
-    </h2>
-    <p className='text-white font-[Gully] font-light text-sm sm:text-base leading-snug line-clamp-2 sm:line-clamp-3'>
+    </motion.h2>
+    <motion.p
+      className='text-white font-[Gully] font-light text-sm sm:text-base leading-snug line-clamp-2 sm:line-clamp-3'
+      initial={{ opacity: 0, x: -20 }}
+      animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+      transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+    >
       {description}
-    </p>
-  </div>
+    </motion.p>
+  </motion.div>
 );
 
-const SlideContent = ({ title, description, isMobile, isTablet }) => {
+const SlideContent = ({
+  title,
+  description,
+  isMobile,
+  isTablet,
+  isVisible = true,
+}) => {
   if (!isMobile && !isTablet) {
-    return <DesktopSlideContent title={title} description={description} />;
+    return (
+      <DesktopSlideContent
+        title={title}
+        description={description}
+        isVisible={isVisible}
+      />
+    );
   }
-  return <MobileSlideContent title={title} description={description} />;
+  return (
+    <MobileSlideContent
+      title={title}
+      description={description}
+      isVisible={isVisible}
+    />
+  );
 };
 
-const SectionHeader = () => (
-  <div className='mt-16 px-4 sm:px-6 mb-6 sm:mb-8'>
-    <h2 className='text-white font-[Gully] font-normal text-3xl sm:text-4xl mb-2'>
-      Top Destination
-    </h2>
-    <p className='text-white font-[Gully] font-light text-lg sm:text-xl'>
-      Explore the best of Raja Ampat
-    </p>
-  </div>
-);
-
-const GalleryItem = ({ slide, isMobile, isTablet }) => (
-  <a
-    href={slide.background}
-    className='relative block h-[260px] sm:h-[320px] w-full bg-cover bg-center rounded-xl overflow-hidden shadow-lg'
-    data-lg-size='1400-800'
-    data-sub-html={`${slide.title} - ${slide.description}`}
-    style={{ backgroundImage: `url(${slide.background})` }}
+const SectionHeader = ({ isVisible = true }) => (
+  <motion.div
+    className='mt-16 px-4 sm:px-6 mb-6 sm:mb-8'
+    initial={{ opacity: 0, y: -20 }}
+    animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+    transition={{ duration: 0.7, ease: "easeOut" }}
   >
-    <div className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent'></div>
-    <SlideContent
-      title={slide.title}
-      description={slide.description}
-      isMobile={isMobile}
-      isTablet={isTablet}
-    />
-  </a>
+    <motion.h2
+      className='text-white font-[Gully] font-normal text-3xl sm:text-4xl mb-2'
+      initial={{ opacity: 0, x: -30 }}
+      animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+      transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+    >
+      Top Destination
+    </motion.h2>
+    <motion.p
+      className='text-white font-[Gully] font-light text-lg sm:text-xl'
+      initial={{ opacity: 0, x: -30 }}
+      animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+      transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+    >
+      Explore the best of Raja Ampat
+    </motion.p>
+  </motion.div>
 );
 
-const MobileLayout = ({ galleryItems, deviceSize }) => {
+const GalleryItem = ({
+  slide,
+  isMobile,
+  isTablet,
+  index = 0,
+  isVisible = true,
+}) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}
+    >
+      <a
+        href={slide.background}
+        className='relative block h-[260px] sm:h-[320px] w-full bg-cover bg-center rounded-xl overflow-hidden shadow-lg'
+        data-lg-size='1400-800'
+        data-sub-html={`${slide.title} - ${slide.description}`}
+        style={{
+          backgroundImage: imageLoaded ? `url(${slide.background})` : "none",
+        }}
+      >
+        {!imageLoaded && (
+          <ImageSkeleton
+            className='h-[260px] sm:h-[320px] w-full'
+            aspectRatio='aspect-[4/3]'
+          />
+        )}
+        <img
+          src={slide.background}
+          alt={slide.title}
+          className='absolute inset-0 w-full h-full object-cover opacity-0'
+          loading='lazy'
+          onLoad={() => setImageLoaded(true)}
+        />
+        <div className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent'></div>
+        <SlideContent
+          title={slide.title}
+          description={slide.description}
+          isMobile={isMobile}
+          isTablet={isTablet}
+          isVisible={isVisible && imageLoaded}
+        />
+      </a>
+    </motion.div>
+  );
+};
+
+const MobileLayout = ({
+  galleryItems,
+  deviceSize,
+  isVisible = true,
+  hasLoaded = false,
+}) => {
   const isMobile = deviceSize === "mobile";
   const isTablet = deviceSize === "tablet";
 
   return (
-    <div
+    <motion.div
       id='top-destination'
       className='min-h-[80vh] py-8 sm:py-12 w-full px-4 sm:px-6'
+      initial={{ opacity: 0, y: 50 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <SectionHeader />
-      <LightGallery
-        plugins={[lgThumbnail, lgZoom]}
-        dynamic
-        dynamicEl={galleryItems}
-      >
-        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-          {SLIDES_DATA.map((slide) => (
-            <GalleryItem
-              key={slide.id}
-              slide={slide}
-              isMobile={isMobile}
-              isTablet={isTablet}
-            />
-          ))}
-        </div>
-      </LightGallery>
-    </div>
+      <LazyLoadingSkeleton isLoaded={hasLoaded}>
+        <SectionHeader isVisible={isVisible} />
+      </LazyLoadingSkeleton>
+
+      {/* Only render LightGallery when loaded */}
+      {hasLoaded && (
+        <LightGallery
+          plugins={[lgThumbnail, lgZoom]}
+          dynamic
+          dynamicEl={galleryItems}
+        >
+          <motion.div
+            className='grid grid-cols-1 sm:grid-cols-2 gap-4'
+            initial={{ opacity: 0 }}
+            animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
+          >
+            {SLIDES_DATA.map((slide, index) => (
+              <LazyLoadingSkeleton key={slide.id} isLoaded={hasLoaded}>
+                <GalleryItem
+                  slide={slide}
+                  isMobile={isMobile}
+                  isTablet={isTablet}
+                  index={index}
+                  isVisible={isVisible}
+                />
+              </LazyLoadingSkeleton>
+            ))}
+          </motion.div>
+        </LightGallery>
+      )}
+    </motion.div>
   );
 };
 
-const DesktopLayout = () => {
+const DesktopLayout = ({ isVisible = true, hasLoaded = false }) => {
   const swiperRef = useRef(null);
 
   return (
-    <div id='top-destination' className='h-screen w-full'>
-      <Swiper
-        ref={swiperRef}
-        direction='vertical'
-        pagination={SWIPER_CONFIG.pagination}
-        modules={[Pagination, Autoplay]}
-        autoplay={SWIPER_CONFIG.autoplay}
-        className='h-full w-full swiper-container'
-      >
-        {SLIDES_DATA.map((slide) => (
-          <SwiperSlide key={slide.id}>
-            <div
-              className='h-full w-full bg-cover bg-center relative'
-              style={{ backgroundImage: `url(${slide.background})` }}
-            >
-              <SlideContent
-                title={slide.title}
-                description={slide.description}
-                isMobile={false}
-                isTablet={false}
-              />
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+    <motion.div
+      id='top-destination'
+      className='h-screen w-full'
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={
+        isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }
+      }
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
+      {/* Only render Swiper when loaded */}
+      {hasLoaded && (
+        <Swiper
+          ref={swiperRef}
+          direction='vertical'
+          pagination={SWIPER_CONFIG.pagination}
+          modules={[Pagination, Autoplay]}
+          autoplay={SWIPER_CONFIG.autoplay}
+          className='h-full w-full swiper-container'
+        >
+          {SLIDES_DATA.map((slide, index) => (
+            <SwiperSlide key={slide.id}>
+              <div
+                className='h-full w-full bg-cover bg-center relative'
+                style={{ backgroundImage: `url(${slide.background})` }}
+              >
+                <SlideContent
+                  title={slide.title}
+                  description={slide.description}
+                  isMobile={false}
+                  isTablet={false}
+                  isVisible={isVisible}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
+
+      {/* Loading skeleton for desktop */}
+      {!hasLoaded && (
+        <div className='h-full w-full bg-gradient-to-br from-gray-800 via-gray-900 to-black flex items-center justify-center'>
+          <motion.div
+            className='text-white text-2xl font-[Gully]'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            Loading destinations...
+          </motion.div>
+        </div>
+      )}
+    </motion.div>
   );
 };
 
@@ -219,15 +364,30 @@ export default function TopDestination() {
   const isTablet = deviceSize === "tablet";
   const isSmallDevice = isMobile || isTablet;
 
+  const { ref, isInView, hasLoaded } = useLazyLoad({
+    threshold: 0.1,
+    rootMargin: "100px 0px",
+    triggerOnce: true,
+  });
+
   const galleryItems = SLIDES_DATA.map((slide) => ({
     src: slide.background,
     thumb: slide.background,
     subHtml: `${slide.title} - ${slide.description}`,
   }));
 
-  if (isSmallDevice) {
-    return <MobileLayout galleryItems={galleryItems} deviceSize={deviceSize} />;
-  }
-
-  return <DesktopLayout />;
+  return (
+    <div ref={ref}>
+      {isSmallDevice ? (
+        <MobileLayout
+          galleryItems={galleryItems}
+          deviceSize={deviceSize}
+          isVisible={isInView}
+          hasLoaded={hasLoaded}
+        />
+      ) : (
+        <DesktopLayout isVisible={isInView} hasLoaded={hasLoaded} />
+      )}
+    </div>
+  );
 }

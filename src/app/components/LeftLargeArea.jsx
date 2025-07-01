@@ -73,13 +73,16 @@ const RatingSection = ({ rating, explorerCount, isLoading, isInView }) => {
   );
 };
 
-export default function LeftLargeArea() {
+export default function LeftLargeArea({ isVisible = true }) {
   const supabase = useSupabase();
   const { ref, isInView } = useLazyLoad({
     threshold: 0.1,
     rootMargin: "100px 0px",
     triggerOnce: true,
   });
+
+  // Use parent visibility state combined with internal intersection observer
+  const shouldShow = isVisible && isInView;
 
   const [ratingData, setRatingData] = useState({
     averageRating: 4.93,
@@ -89,7 +92,7 @@ export default function LeftLargeArea() {
 
   useEffect(() => {
     // Only fetch data when component is in view
-    if (!isInView) return;
+    if (!shouldShow) return;
 
     const fetchRatingData = async () => {
       try {
@@ -140,28 +143,28 @@ export default function LeftLargeArea() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [isInView, supabase]);
+  }, [shouldShow, supabase]);
 
   const containerClasses =
     "flex flex-col justify-between w-full lg:w-[1044px] h-auto min-h-[300px] sm:min-h-[420px] lg:h-[724px] bg-white/5 backdrop-blur-xs shadow-lg rounded-[12px] sm:rounded-[16px] lg:rounded-[20px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 border border-white";
 
   // Apply lazy load animation only when in view
-  const animationConfig = isInView
+  const animationConfig = shouldShow
     ? ANIMATION_CONFIG
     : { initial: { opacity: 0, y: 20 } };
 
   return (
     <motion.div ref={ref} {...animationConfig} className={containerClasses}>
       <div className='flex flex-col items-center text-center space-y-3 sm:space-y-4 lg:space-y-6 mt-8 sm:mt-12 lg:mt-20'>
-        <HeroTitle isInView={isInView} />
-        <HeroDescription isInView={isInView} />
+        <HeroTitle isInView={shouldShow} />
+        <HeroDescription isInView={shouldShow} />
       </div>
 
       <RatingSection
         rating={ratingData.averageRating}
         explorerCount={ratingData.totalExplorers}
         isLoading={ratingData.isLoading}
-        isInView={isInView}
+        isInView={shouldShow}
       />
     </motion.div>
   );

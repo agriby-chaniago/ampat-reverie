@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useLazyLoad } from "../hooks/useLazyLoad";
+import { LazyLoadingSkeleton } from "../components/LazyLoadingSkeleton";
 
 const BREAKPOINTS = {
   MOBILE: 640,
@@ -119,11 +121,10 @@ const handleScrollToSection = (e, href, slideId) => {
   }
 };
 
-const FooterTitle = ({ isMobile }) => (
+const FooterTitle = ({ isMobile, isVisible = true }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
+    animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
     transition={{ duration: 0.8, ease: "easeOut" }}
     className='relative z-10 px-3 sm:px-6 md:px-12'
   >
@@ -133,11 +134,10 @@ const FooterTitle = ({ isMobile }) => (
   </motion.div>
 );
 
-const FooterDescription = ({ isMobile }) => (
+const FooterDescription = ({ isMobile, isVisible = true }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
+    animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
     transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
     className='relative z-10 px-3 sm:px-6 md:px-12 mt-1 sm:mt-4 md:mt-6 lg:mt-8'
   >
@@ -209,11 +209,10 @@ const CompactFooterColumn = ({ title, items }) => (
   </div>
 );
 
-const FooterColumns = ({ isMobile }) => (
+const FooterColumns = ({ isMobile, isVisible = true }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
+    animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
     transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
     className='relative z-10 px-3 sm:px-6 md:px-12 py-5 sm:py-10 md:py-12'
   >
@@ -242,11 +241,10 @@ const FooterColumns = ({ isMobile }) => (
   </motion.div>
 );
 
-const FooterCopyright = ({ isMobile }) => (
+const FooterCopyright = ({ isMobile, isVisible = true }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
+    animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
     transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
     className='relative z-10 w-full px-3 sm:px-6 md:px-12 pb-3 sm:pb-6 md:pb-8'
   >
@@ -266,12 +264,35 @@ export default function Footer() {
   const deviceSize = useDeviceSize();
   const isMobile = deviceSize === "mobile";
 
+  const { ref, isInView, hasLoaded } = useLazyLoad({
+    threshold: 0.1,
+    rootMargin: "100px 0px",
+    triggerOnce: true,
+  });
+
   return (
-    <footer className='relative w-full flex flex-col text-white pt-8 sm:pt-16 md:pt-24 lg:pt-32'>
-      <FooterTitle isMobile={isMobile} />
-      <FooterDescription isMobile={isMobile} />
-      <FooterColumns isMobile={isMobile} />
-      <FooterCopyright isMobile={isMobile} />
-    </footer>
+    <motion.footer
+      ref={ref}
+      className='relative w-full flex flex-col text-white pt-8 sm:pt-16 md:pt-24 lg:pt-32'
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
+      <LazyLoadingSkeleton isLoaded={hasLoaded}>
+        <FooterTitle isMobile={isMobile} isVisible={isInView} />
+      </LazyLoadingSkeleton>
+
+      <LazyLoadingSkeleton isLoaded={hasLoaded}>
+        <FooterDescription isMobile={isMobile} isVisible={isInView} />
+      </LazyLoadingSkeleton>
+
+      <LazyLoadingSkeleton isLoaded={hasLoaded}>
+        <FooterColumns isMobile={isMobile} isVisible={isInView} />
+      </LazyLoadingSkeleton>
+
+      <LazyLoadingSkeleton isLoaded={hasLoaded}>
+        <FooterCopyright isMobile={isMobile} isVisible={isInView} />
+      </LazyLoadingSkeleton>
+    </motion.footer>
   );
 }

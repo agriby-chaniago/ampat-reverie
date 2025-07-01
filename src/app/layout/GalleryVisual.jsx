@@ -5,6 +5,11 @@ import { motion } from "framer-motion";
 import LightGallery from "lightgallery/react";
 import lgZoom from "lightgallery/plugins/zoom";
 import lgThumbnail from "lightgallery/plugins/thumbnail";
+import { useLazyLoad } from "../hooks/useLazyLoad";
+import {
+  LazyLoadingSkeleton,
+  ImageSkeleton,
+} from "../components/LazyLoadingSkeleton";
 
 import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-thumbnail.css";
@@ -44,7 +49,7 @@ const useDeviceSize = () => {
   return deviceSize;
 };
 
-const SectionHeader = ({ isMobile, isTablet }) => {
+const SectionHeader = ({ isMobile, isTablet, isVisible = true }) => {
   const isSmallDevice = isMobile || isTablet;
 
   return (
@@ -53,8 +58,7 @@ const SectionHeader = ({ isMobile, isTablet }) => {
         isSmallDevice ? "mb-3 sm:mb-4" : "mb-5 md:mb-8"
       }`}
       initial={{ opacity: 0, y: -20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
     >
       <h2
@@ -86,15 +90,22 @@ const SectionHeader = ({ isMobile, isTablet }) => {
   );
 };
 
-const GalleryItem = ({ img, idx, isMobile, isTablet, onClick }) => {
+const GalleryItem = ({
+  img,
+  idx,
+  isMobile,
+  isTablet,
+  onClick,
+  isVisible = true,
+}) => {
   const isSmallDevice = isMobile || isTablet;
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <motion.div
       key={idx}
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{
         duration: 0.5,
         ease: "easeOut",
@@ -105,10 +116,24 @@ const GalleryItem = ({ img, idx, isMobile, isTablet, onClick }) => {
       }`}
       onClick={onClick}
     >
+      {!imageLoaded && (
+        <ImageSkeleton
+          className={
+            isMobile
+              ? "h-32 w-full"
+              : isTablet
+              ? "h-48 w-full"
+              : "h-64 w-auto max-w-full"
+          }
+          aspectRatio={isMobile || isTablet ? "aspect-[4/3]" : "aspect-video"}
+        />
+      )}
       <img
         src={img.thumb}
         alt={`Gallery Visual ${idx + 1}`}
-        className={`block ${
+        className={`block transition-opacity duration-300 ${
+          imageLoaded ? "opacity-100" : "opacity-0"
+        } ${
           isMobile
             ? "h-32 w-full object-cover"
             : isTablet
@@ -116,18 +141,18 @@ const GalleryItem = ({ img, idx, isMobile, isTablet, onClick }) => {
             : "h-64 w-auto max-w-full object-contain"
         }`}
         loading='lazy'
+        onLoad={() => setImageLoaded(true)}
       />
       <div className='absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition duration-300' />
     </motion.div>
   );
 };
 
-const ViewAllButton = ({ onClick, isMobile }) => (
+const ViewAllButton = ({ onClick, isMobile, isVisible = true }) => (
   <motion.div
     className='mt-4 sm:mt-6 mb-4 sm:mb-8 text-center'
     initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-100px" }}
+    animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
     transition={{ duration: 0.5, ease: "easeOut", delay: 0.6 }}
   >
     <button
@@ -141,7 +166,13 @@ const ViewAllButton = ({ onClick, isMobile }) => (
   </motion.div>
 );
 
-const GalleryGrid = ({ images, galleryRef, isMobile, isTablet }) => {
+const GalleryGrid = ({
+  images,
+  galleryRef,
+  isMobile,
+  isTablet,
+  isVisible = true,
+}) => {
   const isSmallDevice = isMobile || isTablet;
 
   return (
@@ -162,6 +193,7 @@ const GalleryGrid = ({ images, galleryRef, isMobile, isTablet }) => {
             idx={idx}
             isMobile={isMobile}
             isTablet={isTablet}
+            isVisible={isVisible}
             onClick={() => galleryRef.current?.openGallery(idx)}
           />
         ))}
@@ -170,6 +202,7 @@ const GalleryGrid = ({ images, galleryRef, isMobile, isTablet }) => {
       <ViewAllButton
         onClick={() => galleryRef.current?.openGallery(0)}
         isMobile={isMobile}
+        isVisible={isVisible}
       />
     </div>
   );
@@ -178,6 +211,12 @@ const GalleryGrid = ({ images, galleryRef, isMobile, isTablet }) => {
 export default function GalleryVisual() {
   const galleryRef = useRef(null);
   const deviceSize = useDeviceSize();
+
+  const { ref, isInView, hasLoaded } = useLazyLoad({
+    threshold: 0.1,
+    rootMargin: "100px 0px",
+    triggerOnce: true,
+  });
 
   const isMobile = deviceSize === "mobile";
   const isTablet = deviceSize === "tablet";
@@ -196,58 +235,76 @@ export default function GalleryVisual() {
     : dynamicEl.slice(0, GALLERY_CONFIG.DESKTOP_VISIBLE);
 
   return (
-    <section
+    <motion.section
+      ref={ref}
       id='gallery'
       className='w-full py-12 sm:py-16 md:py-24 lg:py-44 px-4 sm:px-6 md:px-8'
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <SectionHeader isMobile={isMobile} isTablet={isTablet} />
-      <GalleryGrid
-        images={visibleImages}
-        galleryRef={galleryRef}
-        isMobile={isMobile}
-        isTablet={isTablet}
-      />
-      <LightGallery
-        onInit={(ref) => (galleryRef.current = ref.instance)}
-        dynamic
-        dynamicEl={dynamicEl}
-        plugins={[lgThumbnail, lgZoom]}
-        mode='lg-fade'
-        speed={500}
-        licenseKey={
-          process.env.NEXT_PUBLIC_LIGHTGALLERY_LICENSE_KEY ||
-          "0000-0000-000-0000"
-        }
-        settings={{
-          selector: undefined,
-          download: false,
-          controls: true,
-          preload: 2,
-          hideControlOnEnd: false,
-          mousewheel: true,
-          getCaptionFromTitleOrAlt: false,
-          appendSubHtmlTo: ".lg-sub-html",
-          subHtmlSelectorRelative: false,
-          thumbWidth: 100,
-          thumbHeight: "80px",
-          thumbMargin: 5,
-          thumbnail: true,
-          showThumbByDefault: true,
-          toogleThumb: true,
-          pullCaptionUp: true,
-          enableThumbDrag: true,
-          enableThumbSwipe: true,
-          thumbnailPluginStrings: {
-            toggleThumbnails: "Toggle thumbnails",
-          },
-          zoom: true,
-          scale: 1,
-          zoom_speed: 400,
-          actualSize: true,
-          enableZoomAfter: 300,
-          useLeftForZoom: true,
-        }}
-      />
-    </section>
+      <LazyLoadingSkeleton isLoaded={hasLoaded}>
+        <SectionHeader
+          isMobile={isMobile}
+          isTablet={isTablet}
+          isVisible={isInView}
+        />
+      </LazyLoadingSkeleton>
+
+      <LazyLoadingSkeleton isLoaded={hasLoaded}>
+        <GalleryGrid
+          images={visibleImages}
+          galleryRef={galleryRef}
+          isMobile={isMobile}
+          isTablet={isTablet}
+          isVisible={isInView}
+        />
+      </LazyLoadingSkeleton>
+
+      {/* Only render LightGallery when section is loaded */}
+      {hasLoaded && (
+        <LightGallery
+          onInit={(ref) => (galleryRef.current = ref.instance)}
+          dynamic
+          dynamicEl={dynamicEl}
+          plugins={[lgThumbnail, lgZoom]}
+          mode='lg-fade'
+          speed={500}
+          licenseKey={
+            process.env.NEXT_PUBLIC_LIGHTGALLERY_LICENSE_KEY ||
+            "0000-0000-000-0000"
+          }
+          settings={{
+            selector: undefined,
+            download: false,
+            controls: true,
+            preload: 2,
+            hideControlOnEnd: false,
+            mousewheel: true,
+            getCaptionFromTitleOrAlt: false,
+            appendSubHtmlTo: ".lg-sub-html",
+            subHtmlSelectorRelative: false,
+            thumbWidth: 100,
+            thumbHeight: "80px",
+            thumbMargin: 5,
+            thumbnail: true,
+            showThumbByDefault: true,
+            toogleThumb: true,
+            pullCaptionUp: true,
+            enableThumbDrag: true,
+            enableThumbSwipe: true,
+            thumbnailPluginStrings: {
+              toggleThumbnails: "Toggle thumbnails",
+            },
+            zoom: true,
+            scale: 1,
+            zoom_speed: 400,
+            actualSize: true,
+            enableZoomAfter: 300,
+            useLeftForZoom: true,
+          }}
+        />
+      )}
+    </motion.section>
   );
 }

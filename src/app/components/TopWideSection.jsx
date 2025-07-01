@@ -131,7 +131,11 @@ const DesktopNavigation = ({ isTablet }) => (
   </div>
 );
 
-export default function TopWideSection({ isMobile, isTablet }) {
+export default function TopWideSection({
+  isMobile,
+  isTablet,
+  isVisible = true,
+}) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -155,7 +159,7 @@ export default function TopWideSection({ isMobile, isTablet }) {
   return (
     <motion.header
       initial={{ opacity: 0, y: -32 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -32 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       className={containerClasses}
     >

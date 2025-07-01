@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import TopWideSection from "../components/TopWideSection";
 import TopNarrowSection from "../components/TopNarrowSection";
+import { useLazyLoad } from "../hooks/useLazyLoad";
+import { LazyLoadingSkeleton } from "../components/LazyLoadingSkeleton";
 
 const BREAKPOINTS = {
   mobile: 640,
@@ -40,15 +43,67 @@ const useDeviceSize = () => {
 
 export default function Navbar() {
   const { isMobile, isTablet } = useDeviceSize();
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  const { ref, isInView, hasLoaded } = useLazyLoad({
+    threshold: 0,
+    rootMargin: "0px",
+    triggerOnce: false, // Navbar should respond to scroll changes
+  });
+
+  useEffect(() => {
+    // Set initial load complete after a short delay for smooth entrance
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <nav className='w-full sticky top-0 z-50'>
-      <div className='flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-evenly gap-8 lg:gap-4 px-4 sm:px-6 lg:px-8'>
-        <TopWideSection isMobile={isMobile} isTablet={isTablet} />
+    <motion.nav
+      ref={ref}
+      className='w-full sticky top-0 z-50'
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <motion.div
+        className='flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-evenly gap-8 lg:gap-4 px-4 sm:px-6 lg:px-8'
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+      >
+        <LazyLoadingSkeleton isLoaded={!isInitialLoad}>
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
+          >
+            <TopWideSection
+              isMobile={isMobile}
+              isTablet={isTablet}
+              isVisible={!isInitialLoad}
+            />
+          </motion.div>
+        </LazyLoadingSkeleton>
+
         {!isMobile && (
-          <TopNarrowSection isMobile={isMobile} isTablet={isTablet} />
+          <LazyLoadingSkeleton isLoaded={!isInitialLoad}>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, ease: "easeOut", delay: 0.4 }}
+            >
+              <TopNarrowSection
+                isMobile={isMobile}
+                isTablet={isTablet}
+                isVisible={!isInitialLoad}
+              />
+            </motion.div>
+          </LazyLoadingSkeleton>
         )}
-      </div>
-    </nav>
+      </motion.div>
+    </motion.nav>
   );
 }

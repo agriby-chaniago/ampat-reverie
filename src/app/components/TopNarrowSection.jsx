@@ -4,7 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import UserMenu from "./UserMenu";
 
-export default function TopNarrowSection({ isMobile, isTablet }) {
+export default function TopNarrowSection({
+  isMobile,
+  isTablet,
+  isVisible = true,
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -39,7 +43,7 @@ export default function TopNarrowSection({ isMobile, isTablet }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -24 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -24 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
       className={`
         flex

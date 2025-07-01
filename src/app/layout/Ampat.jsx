@@ -23,6 +23,7 @@ export default function Ampat() {
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
+      <h1>COYYYYYY</h1>
       <LeftLargeArea isVisible={isInView} />
 
       <motion.div

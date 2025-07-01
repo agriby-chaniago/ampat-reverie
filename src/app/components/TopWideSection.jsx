@@ -7,7 +7,7 @@ import { Menu } from "lucide-react";
 
 const RESPONSIVE_STYLES = {
   width: {
-    mobile: "w-full mx-3",
+    mobile: "w-[360px]",
     tablet: "w-[500px]",
     desktop: "w-[1044px]",
   },

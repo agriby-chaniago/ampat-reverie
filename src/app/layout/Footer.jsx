@@ -126,7 +126,7 @@ const FooterTitle = ({ isMobile, isVisible = true }) => (
     initial={{ opacity: 0, y: 30 }}
     animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
     transition={{ duration: 0.8, ease: "easeOut" }}
-    className='relative z-10 px-3 sm:px-6 md:px-12'
+    className='relative z-10 px-3 sm:px-6 md:px-12 mt-10'
   >
     <h1 className='font-[Gully] font-normal text-[28px] xs:text-[34px] sm:text-[56px] md:text-[70px] lg:text-[90px] leading-tight tracking-[0.05em] text-left'>
       AMPAT {isMobile ? " " : <br />} REVERIE

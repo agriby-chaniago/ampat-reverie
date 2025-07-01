@@ -118,7 +118,7 @@ export default function Why() {
 			</motion.div>
 
 			{/* Content with enhanced visuals - Responsive layout */}
-			<div className='relative flex flex-col items-center px-3 sm:px-4 md:px-6 lg:px-11 mb-10 sm:mb-0'>
+			<div className='relative flex flex-col items-center px-3 sm:px-4 md:px-6 lg:px-12 mb-10 sm:mb-0'>
 				<div className={`
     ${isMobile 
       ? 'flex flex-col gap-3 w-full' 

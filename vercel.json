@@ -1,11 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/node"
-    }
-  ],
   "buildCommand": "pnpm build",
   "installCommand": "pnpm install --frozen-lockfile=false",
   "devCommand": "pnpm dev",
@@ -17,5 +11,16 @@
     "app/api/**/*.js": {
       "runtime": "nodejs20.x"
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    }
+  ]
 }

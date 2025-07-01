@@ -4,6 +4,7 @@ import AuthProvider from "./providers/AuthProvider";
 import { SupabaseProvider } from "./providers/SupabaseProvider";
 import FeedbackPopup from "./components/feedback/FeedbackPopup";
 import { ConsoleOptimizer } from "./components/ConsoleOptimizer";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const Gully = localFont({
   src: "./fonts/Gully/Gully-ECDRegular.ttf",
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${Gully.className} antialiased min-h-screen bg-background text-foreground`}
       >
+        <SpeedInsights />
         <ConsoleOptimizer />
         <SupabaseProvider>
           <AuthProvider>

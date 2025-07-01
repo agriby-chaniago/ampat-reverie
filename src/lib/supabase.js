@@ -1,20 +1,21 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
-console.log('Initializing Supabase clients');
-console.log('SUPABASE URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-console.log('Has service role key:', Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY));
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  "https://jigzhqodcafuckmfdlbs.supabase.co";
+const supabaseAnonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppZ3pocW9kY2FmdWNrbWZkbGJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyNTQzMzksImV4cCI6MjA2NjgzMDMzOX0.4uHQ6TUo6uMo31HTyL8s98fzW1PDMKd9zBYjT4JQSbw";
+const supabaseServiceKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppZ3pocW9kY2FmdWNrbWZkbGJzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTI1NDMzOSwiZXhwIjoyMDY2ODMwMzM5fQ.BqGZGwPXuzFIGhK4fgXkBaGDrVBRxXp_8sSHuE9qiDU";
 
-export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-);
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error("Missing Supabase environment variables");
+}
 
-export const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-  {
-    auth: { persistSession: false }
-  }
-);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-console.log('Supabase clients initialized');
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: { persistSession: false },
+});

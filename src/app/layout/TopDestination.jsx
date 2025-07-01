@@ -14,7 +14,17 @@ import "lightgallery/css/lightgallery.css";
 import "lightgallery/css/lg-thumbnail.css";
 import "lightgallery/css/lg-zoom.css";
 
-const slides = [
+const BREAKPOINTS = {
+  MOBILE: 640,
+  TABLET: 1024,
+};
+
+const SWIPER_CONFIG = {
+  autoplay: { delay: 5000, disableOnInteraction: false },
+  pagination: { clickable: true },
+};
+
+const SLIDES_DATA = [
   {
     id: "arborek",
     title: "Arborek",
@@ -59,118 +69,131 @@ const slides = [
   },
 ];
 
-const SlideContent = ({ title, description, isMobile, isTablet }) => {
-  if (!isMobile && !isTablet) {
-    return (
-      <div className='relative h-full w-full flex flex-col justify-end pb-24 px-16 bg-black/40'>
-        <h2 className='text-white font-[Gully] font-normal text-[100px] leading-[100px] max-w-[800px] mb-[30px]'>
-          {title}
-        </h2>
-        <p className='text-white font-[Gully] font-light mt-[15px] text-[45px] leading-[55px] max-w-[756px]'>
-          {description}
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className='absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-[2px] p-4 sm:p-6'>
-      <h2 className='text-white font-[Gully] font-normal text-2xl sm:text-3xl leading-tight mb-1 sm:mb-2'>
-        {title}
-      </h2>
-      <p className='text-white font-[Gully] font-light text-sm sm:text-base leading-snug line-clamp-2 sm:line-clamp-3'>
-        {description}
-      </p>
-    </div>
-  );
-};
-
-export default function TopDestination() {
-  const swiperRef = useRef(null);
+const useDeviceSize = () => {
   const [deviceSize, setDeviceSize] = useState("desktop");
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width < 640) {
+      if (width < BREAKPOINTS.MOBILE) {
         setDeviceSize("mobile");
-      } else if (width < 1024) {
+      } else if (width < BREAKPOINTS.TABLET) {
         setDeviceSize("tablet");
       } else {
         setDeviceSize("desktop");
       }
     };
+
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  return deviceSize;
+};
+
+const DesktopSlideContent = ({ title, description }) => (
+  <div className='relative h-full w-full flex flex-col justify-end pb-24 px-16 bg-black/40'>
+    <h2 className='text-white font-[Gully] font-normal text-[100px] leading-[100px] max-w-[800px] mb-[30px]'>
+      {title}
+    </h2>
+    <p className='text-white font-[Gully] font-light mt-[15px] text-[45px] leading-[55px] max-w-[756px]'>
+      {description}
+    </p>
+  </div>
+);
+
+const MobileSlideContent = ({ title, description }) => (
+  <div className='absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-[2px] p-4 sm:p-6'>
+    <h2 className='text-white font-[Gully] font-normal text-2xl sm:text-3xl leading-tight mb-1 sm:mb-2'>
+      {title}
+    </h2>
+    <p className='text-white font-[Gully] font-light text-sm sm:text-base leading-snug line-clamp-2 sm:line-clamp-3'>
+      {description}
+    </p>
+  </div>
+);
+
+const SlideContent = ({ title, description, isMobile, isTablet }) => {
+  if (!isMobile && !isTablet) {
+    return <DesktopSlideContent title={title} description={description} />;
+  }
+  return <MobileSlideContent title={title} description={description} />;
+};
+
+const SectionHeader = () => (
+  <div className='mt-16 px-4 sm:px-6 mb-6 sm:mb-8'>
+    <h2 className='text-white font-[Gully] font-normal text-3xl sm:text-4xl mb-2'>
+      Top Destination
+    </h2>
+    <p className='text-white font-[Gully] font-light text-lg sm:text-xl'>
+      Explore the best of Raja Ampat
+    </p>
+  </div>
+);
+
+const GalleryItem = ({ slide, isMobile, isTablet }) => (
+  <a
+    href={slide.background}
+    className='relative block h-[260px] sm:h-[320px] w-full bg-cover bg-center rounded-xl overflow-hidden shadow-lg'
+    data-lg-size='1400-800'
+    data-sub-html={`${slide.title} - ${slide.description}`}
+    style={{ backgroundImage: `url(${slide.background})` }}
+  >
+    <div className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent'></div>
+    <SlideContent
+      title={slide.title}
+      description={slide.description}
+      isMobile={isMobile}
+      isTablet={isTablet}
+    />
+  </a>
+);
+
+const MobileLayout = ({ galleryItems, deviceSize }) => {
   const isMobile = deviceSize === "mobile";
   const isTablet = deviceSize === "tablet";
-  const isSmallDevice = isMobile || isTablet;
 
-  const galleryItems = slides.map((s) => ({
-    src: s.background,
-    thumb: s.background,
-    subHtml: `${s.title} - ${s.description}`,
-  }));
-
-  if (isSmallDevice) {
-    return (
-      <div
-        id='top-destination'
-        className='min-h-[80vh] py-8 sm:py-12 w-full px-4 sm:px-6'
+  return (
+    <div
+      id='top-destination'
+      className='min-h-[80vh] py-8 sm:py-12 w-full px-4 sm:px-6'
+    >
+      <SectionHeader />
+      <LightGallery
+        plugins={[lgThumbnail, lgZoom]}
+        dynamic
+        dynamicEl={galleryItems}
       >
-        <div className='mt-16 px-4 sm:px-6 mb-6 sm:mb-8'>
-          <h2 className='text-white font-[Gully] font-normal text-3xl sm:text-4xl mb-2'>
-            Top Destination
-          </h2>
-          <p className='text-white font-[Gully] font-light text-lg sm:text-xl'>
-            Explore the best of Raja Ampat
-          </p>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+          {SLIDES_DATA.map((slide) => (
+            <GalleryItem
+              key={slide.id}
+              slide={slide}
+              isMobile={isMobile}
+              isTablet={isTablet}
+            />
+          ))}
         </div>
+      </LightGallery>
+    </div>
+  );
+};
 
-        <LightGallery
-          plugins={[lgThumbnail, lgZoom]}
-          dynamic
-          dynamicEl={galleryItems}
-        >
-          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-            {slides.map((slide) => (
-              <a
-                key={slide.id}
-                href={slide.background}
-                className='relative block h-[260px] sm:h-[320px] w-full bg-cover bg-center rounded-xl overflow-hidden shadow-lg'
-                data-lg-size='1400-800'
-                data-sub-html={`${slide.title} - ${slide.description}`}
-                style={{ backgroundImage: `url(${slide.background})` }}
-              >
-                <div className='absolute inset-0 bg-gradient-to-t from-black/70 to-transparent'></div>
-                <SlideContent
-                  title={slide.title}
-                  description={slide.description}
-                  isMobile={isMobile}
-                  isTablet={isTablet}
-                />
-              </a>
-            ))}
-          </div>
-        </LightGallery>
-      </div>
-    );
-  }
+const DesktopLayout = () => {
+  const swiperRef = useRef(null);
 
   return (
     <div id='top-destination' className='h-screen w-full'>
       <Swiper
         ref={swiperRef}
         direction='vertical'
-        pagination={{ clickable: true }}
+        pagination={SWIPER_CONFIG.pagination}
         modules={[Pagination, Autoplay]}
-        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        autoplay={SWIPER_CONFIG.autoplay}
         className='h-full w-full swiper-container'
       >
-        {slides.map((slide) => (
+        {SLIDES_DATA.map((slide) => (
           <SwiperSlide key={slide.id}>
             <div
               className='h-full w-full bg-cover bg-center relative'
@@ -188,4 +211,23 @@ export default function TopDestination() {
       </Swiper>
     </div>
   );
+};
+
+export default function TopDestination() {
+  const deviceSize = useDeviceSize();
+  const isMobile = deviceSize === "mobile";
+  const isTablet = deviceSize === "tablet";
+  const isSmallDevice = isMobile || isTablet;
+
+  const galleryItems = SLIDES_DATA.map((slide) => ({
+    src: slide.background,
+    thumb: slide.background,
+    subHtml: `${slide.title} - ${slide.description}`,
+  }));
+
+  if (isSmallDevice) {
+    return <MobileLayout galleryItems={galleryItems} deviceSize={deviceSize} />;
+  }
+
+  return <DesktopLayout />;
 }

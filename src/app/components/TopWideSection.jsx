@@ -3,157 +3,168 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import UserMenu from "./UserMenu";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 
-export default function TopWideSection({ isMobile, isTablet }) {
-  const [open, setOpen] = useState(false);
-  const isSmallDevice = isMobile || isTablet;
+const RESPONSIVE_STYLES = {
+  width: {
+    mobile: "w-full mx-3",
+    tablet: "w-[500px]",
+    desktop: "w-[1044px]",
+  },
+  height: {
+    mobile: "h-[70px]",
+    tablet: "h-[85px]",
+    desktop: "h-[102px]",
+  },
+  padding: {
+    mobile: "px-3 py-2",
+    tablet: "px-4 py-3",
+    desktop: "px-6 py-4",
+  },
+  margin: {
+    mobile: "mt-[15px]",
+    tablet: "mt-[40px]",
+    desktop: "mt-[64px]",
+  },
+  logoSize: {
+    mobile: "w-[100px] h-[100px]",
+    tablet: "w-[70px] h-[70px]",
+    desktop: "w-[175px] h-[175px]",
+  },
+};
+
+const NAV_ITEMS = [
+  { href: "#about", label: "About" },
+  {
+    href: "#top-destination",
+    label: "Top Destination",
+    shortLabel: "Destinations",
+  },
+  { href: "#why-visit", label: "Why Visit" },
+  { href: "#gallery", label: "Gallery" },
+];
+
+const getResponsiveStyle = (styleType, isMobile, isTablet) => {
+  if (isMobile) return RESPONSIVE_STYLES[styleType].mobile;
+  if (isTablet) return RESPONSIVE_STYLES[styleType].tablet;
+  return RESPONSIVE_STYLES[styleType].desktop;
+};
+
+const Logo = ({ isMobile, isTablet }) => {
+  const handleLogoClick = () => {
+    document.getElementById("ampat")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <motion.div
+    <div className='flex items-center gap-2'>
+      <button onClick={handleLogoClick} className='flex items-center'>
+        <img
+          src='/assets/icon.png'
+          alt='Ampat Reverie Logo'
+          className={`${getResponsiveStyle(
+            "logoSize",
+            isMobile,
+            isTablet
+          )} cursor-pointer`}
+        />
+      </button>
+    </div>
+  );
+};
+
+const MobileMenu = ({ isOpen, onToggle }) => (
+  <div>
+    <button
+      onClick={onToggle}
+      className='ml-2 rounded-lg p-2 hover:bg-gray-100 transition'
+      aria-label='Toggle navigation menu'
+    >
+      <Menu size={28} />
+    </button>
+
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -12, scale: 0.92 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -12, scale: 0.92 }}
+          transition={{ duration: 0.22 }}
+          className='absolute right-0 top-[70px] mt-2 bg-white shadow-xl rounded-2xl w-[320px] sm:w-[360px] z-[99] border border-gray-100 py-5 px-4'
+        >
+          <nav className='flex flex-col gap-2 text-gray-800 font-medium text-sm px-5 pt-2'>
+            {NAV_ITEMS.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className='hover:text-[#107773] transition-colors py-1'
+                onClick={onToggle}
+              >
+                {item.label}
+              </a>
+            ))}
+            <div className='border-t border-gray-200 my-2' />
+            <UserMenu isMobile={true} isTablet={false} />
+          </nav>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+);
+
+const DesktopNavigation = ({ isTablet }) => (
+  <div className='flex items-center'>
+    <nav
+      className={`flex ${
+        isTablet ? "space-x-3" : "space-x-6"
+      } text-gray-800 font-medium ${isTablet ? "text-sm" : "text-lg"}`}
+    >
+      {NAV_ITEMS.map((item) => (
+        <a
+          key={item.href}
+          href={item.href}
+          className='hover:text-[#107773] transition-colors'
+        >
+          {isTablet && item.shortLabel ? item.shortLabel : item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+);
+
+export default function TopWideSection({ isMobile, isTablet }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen((prev) => !prev);
+  };
+
+  const containerClasses = `flex items-center justify-between ${getResponsiveStyle(
+    "width",
+    isMobile,
+    isTablet
+  )} ${getResponsiveStyle("height", isMobile, isTablet)} ${getResponsiveStyle(
+    "padding",
+    isMobile,
+    isTablet
+  )} ${getResponsiveStyle(
+    "margin",
+    isMobile,
+    isTablet
+  )} bg-white shadow-lg rounded-2xl z-50 relative`;
+
+  return (
+    <motion.header
       initial={{ opacity: 0, y: -32 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`
-        flex items-center justify-between
-        ${
-          isMobile ? "w-full mx-3" : isTablet ? "w-[500px]" : "w-[1044px]"
-        } // Menyesuaikan ukuran lebar berdasarkan perangkat
-        ${
-          isMobile ? "h-[70px]" : isTablet ? "h-[85px]" : "h-[102px]"
-        } // Menyesuaikan tinggi header
-        bg-white shadow-lg rounded-2xl
-        ${
-          isMobile ? "px-3 py-2" : isTablet ? "px-4 py-3" : "px-6 py-4"
-        } // Padding responsif
-        ${
-          isMobile ? "mt-[15px]" : isTablet ? "mt-[40px]" : "mt-[64px]"
-        } // Margin responsif
-        z-50
-        relative
-      `}
+      className={containerClasses}
     >
-      <div className='flex items-center gap-2'>
-        <button
-          onClick={() =>
-            document
-              .getElementById("ampat")
-              ?.scrollIntoView({ behavior: "smooth" })
-          }
-          className='flex items-center'
-        >
-          <img
-            src='/assets/icon.png'
-            alt='Icon'
-            className={`
-              ${
-                isMobile
-                  ? "w-[100px] h-[100px]"
-                  : isTablet
-                  ? "w-[70px] h-[70px]"
-                  : "w-[175px] h-[175px]"
-              } // Ukuran logo responsif
-              cursor-pointer
-            `}
-          />
-        </button>
-      </div>
-
-      {/* Hamburger Menu untuk perangkat mobile */}
+      <Logo isMobile={isMobile} isTablet={isTablet} />
       {isMobile ? (
-        <div>
-          <button
-            onClick={() => setOpen((v) => !v)}
-            className='ml-2 rounded-lg p-2 hover:bg-gray-100 transition'
-            aria-label='Menu'
-          >
-            <Menu size={28} />
-          </button>
-
-          {/* Menu yang muncul ketika tombol hamburger ditekan */}
-          <AnimatePresence>
-            {open && (
-              <motion.div
-                initial={{ opacity: 0, y: -12, scale: 0.92 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -12, scale: 0.92 }}
-                transition={{ duration: 0.22 }}
-                className='absolute right-0 top-[70px] mt-2 bg-white shadow-xl rounded-2xl w-[320px] sm:w-[360px] z-[99] border border-gray-100 py-5 px-4'
-              >
-                <nav className='flex flex-col gap-2 text-gray-800 font-medium text-sm px-5 pt-2'>
-                  <a
-                    href='#about'
-                    className='hover:text-[#107773] transition-colors py-1'
-                    onClick={() => setOpen(false)}
-                  >
-                    About
-                  </a>
-                  <a
-                    href='#top-destination'
-                    className='hover:text-[#107773] transition-colors py-1'
-                    onClick={() => setOpen(false)}
-                  >
-                    Explore
-                  </a>
-                  <a
-                    href='#why-visit'
-                    className='hover:text-[#107773] transition-colors py-1'
-                    onClick={() => setOpen(false)}
-                  >
-                    Why
-                  </a>
-                  <a
-                    href='#gallery'
-                    className='hover:text-[#107773] transition-colors py-1'
-                    onClick={() => setOpen(false)}
-                  >
-                    Gallery
-                  </a>
-                  <div className='border-t border-gray-200 my-2' />
-                  <UserMenu isMobile={isMobile} isTablet={isTablet} />
-                </nav>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+        <MobileMenu isOpen={isMobileMenuOpen} onToggle={toggleMobileMenu} />
       ) : (
-        // Menu untuk tablet dan desktop
-        <div className='flex items-center'>
-          <nav
-            className={`
-              flex
-              ${
-                isTablet ? "space-x-3" : "space-x-6"
-              } // Menyesuaikan jarak antar item
-              text-gray-800
-              font-medium
-              ${isTablet ? "text-sm" : "text-lg"} // Ukuran font responsif
-            `}
-          >
-            <a href='#about' className='hover:text-[#107773] transition-colors'>
-              About
-            </a>
-            <a
-              href='#top-destination'
-              className='hover:text-[#107773] transition-colors'
-            >
-              {isTablet ? "Destinations" : "Top Destination"}
-            </a>
-            <a
-              href='#why-visit'
-              className='hover:text-[#107773] transition-colors'
-            >
-              Why Visit
-            </a>
-            <a
-              href='#gallery'
-              className='hover:text-[#107773] transition-colors'
-            >
-              Gallery
-            </a>
-          </nav>
-        </div>
+        <DesktopNavigation isTablet={isTablet} />
       )}
-    </motion.div>
+    </motion.header>
   );
 }

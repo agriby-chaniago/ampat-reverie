@@ -18,10 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <body
-        className={`
-          ${Gully.className}
-          antialiased min-h-screen bg-background text-foreground
-        `}
+        className={`${Gully.className} antialiased min-h-screen bg-background text-foreground`}
       >
         <AuthProvider>
           {children}

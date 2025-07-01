@@ -9,6 +9,13 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
       profile(profile) {
         return {
           id: profile.sub,
@@ -21,12 +28,19 @@ const handler = NextAuth({
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "email@example.com" },
-        password: { label: "Password", type: "password" }
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "email@example.com",
+        },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         // First, check for the hard-coded admin user
-        if (credentials.email === "admin@example.com" && credentials.password === "password") {
+        if (
+          credentials.email === "admin@example.com" &&
+          credentials.password === "password"
+        ) {
           return {
             id: "admin-1",
             name: "Admin User",
@@ -37,9 +51,9 @@ const handler = NextAuth({
         try {
           // Find user in Supabase
           const { data: user, error } = await supabaseAdmin
-            .from('users')
-            .select('*')
-            .eq('email', credentials.email)
+            .from("users")
+            .select("*")
+            .eq("email", credentials.email)
             .single();
 
           if (error || !user) {
@@ -48,7 +62,10 @@ const handler = NextAuth({
           }
 
           // Verify password
-          const passwordMatches = await compare(credentials.password, user.password);
+          const passwordMatches = await compare(
+            credentials.password,
+            user.password
+          );
           if (!passwordMatches) {
             console.log(`Password incorrect for: ${credentials.email}`);
             return null;
@@ -64,7 +81,7 @@ const handler = NextAuth({
           console.error("Auth error:", error);
           return null;
         }
-      }
+      },
     }),
   ],
   callbacks: {
@@ -74,28 +91,28 @@ const handler = NextAuth({
         try {
           // Check if user exists in our database
           const { data: existingUser } = await supabaseAdmin
-            .from('users')
-            .select('id')
-            .eq('email', user.email)
+            .from("users")
+            .select("id")
+            .eq("email", user.email)
             .maybeSingle();
-          
+
           // If not, create a new user
           if (!existingUser) {
             const { data: newUser, error } = await supabaseAdmin
-              .from('users')
+              .from("users")
               .insert({
                 email: user.email,
                 name: user.name,
                 // No password needed for OAuth sign-ins
               })
-              .select('id')
+              .select("id")
               .single();
-              
+
             if (error) {
               console.error("Error creating user from Google sign in:", error);
               return false;
             }
-            
+
             // Update user id to match our database
             user.id = newUser.id;
           } else {
@@ -132,7 +149,7 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === "development",
 });
 
 export { handler as GET, handler as POST };

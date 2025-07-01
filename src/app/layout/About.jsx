@@ -30,37 +30,23 @@ export default function About() {
   return (
     <div
       id='about'
-      className='
-        w-full max-w-screen-xl mx-auto
-        flex flex-col
-        items-center            // ✅ semua anak akan berada di tengah
-        gap-2 sm:gap-4 lg:gap-6
-        py-16 sm:py-24 lg:py-32
-        px-4 sm:px-6
-        pb-6
-        relative
-      '
+      className='w-full max-w-screen-xl mx-auto flex flex-col items-center gap-2 sm:gap-4 lg:gap-6 py-16 sm:py-24 lg:py-32 px-4 sm:px-6 pb-6 relative'
     >
+      {/* Menampilkan CenterLargeArea dengan ukuran lebar penuh di desktop */}
       <CenterLargeArea deviceSize={deviceSize} />
 
-      {isMobile ? (
-        <>
-          <LeftLowerSection deviceSize={deviceSize} />
-          <RightLowerSection deviceSize={deviceSize} />
-        </>
-      ) : (
-        <div
-          className='
-            w-full flex flex-col lg:flex-row
-            items-center lg:items-start
-            justify-center
-            gap-6 sm:gap-8 lg:gap-10
-          '
-        >
-          <LeftLowerSection deviceSize={deviceSize} />
-          <RightLowerSection deviceSize={deviceSize} />
-        </div>
-      )}
+      {/* Menampilkan LeftLowerSection dan RightLowerSection secara responsif */}
+      <div
+        className={`
+          w-full
+          flex flex-col lg:flex-row 
+          items-center lg:items-start
+          justify-center gap-6 sm:gap-8 lg:gap-10
+        `}
+      >
+        <LeftLowerSection deviceSize={deviceSize} />
+        <RightLowerSection deviceSize={deviceSize} />
+      </div>
     </div>
   );
 }

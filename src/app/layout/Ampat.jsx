@@ -19,7 +19,6 @@ export default function Ampat() {
       '
     >
       <LeftLargeArea />
-      {/* Kontainer untuk RightTop dan RightLow */}
       <div className='flex flex-col gap-6 sm:gap-8 lg:gap-11 w-full lg:w-auto'>
         <RightTop />
         <RightLow />

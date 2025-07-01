@@ -15,7 +15,6 @@ export default function Home() {
       <TopDestination />
       <Why />
 
-      {/* Background wrapper untuk Gallery+Footer */}
       <div
         className='relative w-full'
         style={{
@@ -25,10 +24,8 @@ export default function Home() {
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* Overlay jika mau */}
         <div className='absolute inset-0 bg-black/40 z-0' />
 
-        {/* Content */}
         <div className='relative z-10 flex flex-col'>
           <GalleryVisual />
           <Footer />

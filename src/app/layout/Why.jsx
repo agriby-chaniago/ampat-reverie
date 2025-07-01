@@ -42,7 +42,6 @@ export default function Why() {
 			}
 		};
 
-		// Set initial value
 		handleResize();
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
@@ -56,7 +55,6 @@ export default function Why() {
 			id='why-visit'
 			className="w-full min-h-0 sm:min-h-screen pt-[50px] sm:pt-[75px] bg-[url('/assets/bgWhy.png')] bg-cover bg-center bg-no-repeat"
 		>
-			{/* Enhanced Header with animation - Responsive sizing */}
 			<motion.div
 				initial={{ opacity: 0, y: -30 }}
 				whileInView={{ opacity: 1, y: 0 }}
@@ -92,7 +90,6 @@ export default function Why() {
 					/>
 				</span>
 
-				{/* Decorative elements - Hide on mobile */}
 				{!isMobile && (
 					<>
 						<motion.div
@@ -117,7 +114,6 @@ export default function Why() {
 				)}
 			</motion.div>
 
-			{/* Content with enhanced visuals - Responsive layout */}
 			<div className='relative flex flex-col items-center px-3 sm:px-4 md:px-6 lg:px-12 mb-10 sm:mb-0'>
 				<div className={`
     ${isMobile 
@@ -164,12 +160,10 @@ export default function Why() {
           overflow-hidden
         `}
 						>
-							{/* Background gradient */}
 							<div
 								className={`absolute inset-0 bg-gradient-to-r ${item.color} opacity-0 group-hover:opacity-100 transition-opacity duration-700`}
 							/>
 
-							{/* Circular decorative elements - Hide on mobile */}
 							{!isMobile && (
 								<motion.div
 									className='absolute -z-10 rounded-full bg-white/5 w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24'
@@ -184,7 +178,6 @@ export default function Why() {
 								/>
 							)}
 
-							{/* Image with enhanced animation - Smaller on mobile */}
 							<div
 								className={`
             relative 
@@ -215,7 +208,6 @@ export default function Why() {
 								</motion.div>
 							</div>
 
-							{/* Text with enhanced styling - Smaller on mobile */}
 							<motion.div
 								initial={{
 									opacity: 0,
@@ -246,7 +238,6 @@ export default function Why() {
 									{item.text}
 								</p>
 
-								{/* Subtle decorative line - Smaller on mobile */}
 								<motion.div
 									className={`
               ${isMobile ? 'h-[1px] mt-2 mx-auto' : 'h-[2px] mt-2 sm:mt-3 md:mt-4'}
@@ -262,7 +253,6 @@ export default function Why() {
 					))}
 				</div>
 
-				{/* Bottom decorative circles - Hide on mobile */}
 				{!isMobile && (
 					<motion.div
 						className='absolute bottom-0 right-[10%] w-20 sm:w-30 md:w-40 h-20 sm:h-30 md:h-40 rounded-full border border-white/10 opacity-20 -z-10'

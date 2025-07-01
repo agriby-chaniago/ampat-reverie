@@ -7,7 +7,7 @@ import { EyeIcon, EyeOffIcon, AlertCircle, Loader2 } from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/app/components/ui/card";
 import { Input } from "@/app/components/ui/input";
 import { Button } from "@/app/components/ui/button";
-import { toast } from "sonner"; // Optional: Install sonner for better toast messages
+import { toast } from "sonner";
 
 export default function SignUp() {
   const router = useRouter();
@@ -30,21 +30,17 @@ export default function SignUp() {
   const toggleConfirmPasswordVisibility = () =>
     setShowConfirmPassword((prev) => !prev);
 
-  // Validate email format
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  // Validate password strength
   const validatePassword = (password) => {
-    // Password should be at least 8 characters and include numbers
     const hasMinLength = password.length >= 8;
     const hasNumber = /\d/.test(password);
     return { isValid: hasMinLength && hasNumber, hasMinLength, hasNumber };
   };
 
-  // Handle validation on input change
   const handleInputChange = (field, value) => {
     const errors = { ...validationErrors };
 
@@ -72,7 +68,6 @@ export default function SignUp() {
         } else {
           errors.password = "";
         }
-        // Also update confirm password validation
         if (confirmPassword && value !== confirmPassword) {
           errors.confirmPassword = "Passwords do not match";
         } else {
@@ -90,14 +85,11 @@ export default function SignUp() {
     setValidationErrors(errors);
   };
 
-// Ubah bagian handleSubmit pada sign-up
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  // Reset general error
   setError("");
 
-  // Complete validation before submission
   const emailIsValid = validateEmail(email);
   const { isValid: passwordIsValid } = validatePassword(password);
   const passwordsMatch = password === confirmPassword;
@@ -145,7 +137,6 @@ const handleSubmit = async (e) => {
       }
       setIsLoading(false);
     } else {
-      // Redirect with success parameter AND email
       router.push(`/auth/signin?registered=true&email=${encodeURIComponent(email)}`);
     }
   } catch (err) {
@@ -174,7 +165,6 @@ const handleSubmit = async (e) => {
             )}
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              {/* Name */}
               <div className="flex flex-col">
                 <label
                   htmlFor="name"
@@ -202,7 +192,6 @@ const handleSubmit = async (e) => {
                 )}
               </div>
 
-              {/* Email */}
               <div className="flex flex-col">
                 <label
                   htmlFor="email"
@@ -230,7 +219,6 @@ const handleSubmit = async (e) => {
                 )}
               </div>
 
-              {/* Password */}
               <div className="flex flex-col">
                 <label
                   htmlFor="password"
@@ -277,7 +265,6 @@ const handleSubmit = async (e) => {
                 )}
               </div>
 
-              {/* Confirm Password */}
               <div className="flex flex-col">
                 <label
                   htmlFor="confirmPassword"
@@ -324,7 +311,6 @@ const handleSubmit = async (e) => {
                 )}
               </div>
 
-              {/* Submit */}
               <Button
                 type="submit"
                 disabled={isLoading}

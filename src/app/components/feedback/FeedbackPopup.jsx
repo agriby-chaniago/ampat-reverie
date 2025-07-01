@@ -10,26 +10,23 @@ export default function FeedbackPopup() {
   const [showPopup, setShowPopup] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const [vote, setVote] = useState(null); // null, "up", or "down"
+  const [vote, setVote] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
-  const [userFeedback, setUserFeedback] = useState(null); // Untuk menyimpan feedback yang sudah ada
+  const [userFeedback, setUserFeedback] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [editMode, setEditMode] = useState(false); // Mode edit untuk feedback yang sudah ada
-  const [feedbackChecked, setFeedbackChecked] = useState(false); // Menandai jika sudah cek feedback
+  const [editMode, setEditMode] = useState(false);
+  const [feedbackChecked, setFeedbackChecked] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrollDirection, setScrollDirection] = useState('down');
 
-  // Tambahkan effect untuk mendeteksi perubahan status autentikasi
   useEffect(() => {
-    // Reset state saat logout
     if (status === "unauthenticated") {
       resetFeedbackState();
       setFeedbackChecked(false);
     }
     
-    // Cek feedback saat user login
     if (status === "authenticated" && session?.user?.email && !feedbackChecked) {
       console.log("User authenticated, checking feedback");
       setCurrentUser(session.user.email);
@@ -38,9 +35,7 @@ export default function FeedbackPopup() {
     }
   }, [status, session]);
 
-  // Function untuk reset state
   const resetFeedbackState = () => {
-    // Reset semua state
     setIsVisible(false);
     setShowPopup(false);
     setRating(0);
@@ -51,7 +46,6 @@ export default function FeedbackPopup() {
     setEditMode(false);
   };
   
-  // Fungsi untuk mengecek feedback yang sudah ada
   const checkExistingFeedback = async () => {
     if (!session?.user?.email) {
       console.log("Tidak ada user yang login");
@@ -64,7 +58,6 @@ export default function FeedbackPopup() {
       
       const response = await fetch(`/api/feedback/user?email=${encodeURIComponent(session.user.email)}`);
       
-      // Check response type untuk debugging
       const contentType = response.headers.get("content-type");
       console.log("Response content type:", contentType);
       
@@ -78,15 +71,12 @@ export default function FeedbackPopup() {
       
       if (response.ok && data.feedback) {
         console.log("Feedback ditemukan:", data.feedback);
-        // Jika user sudah pernah memberikan feedback
         setUserFeedback(data.feedback);
         
-        // Pre-fill form jika user ingin edit
         setRating(data.feedback.rating || 0);
         setComment(data.feedback.comment || "");
         setVote(data.feedback.vote || null);
         
-        // Aktifkan tampilan tombol
         setIsVisible(true);
       } else {
         console.log("Tidak ada feedback yang ditemukan");
@@ -94,22 +84,18 @@ export default function FeedbackPopup() {
       }
     } catch (error) {
       console.error("Error checking existing feedback:", error);
-      // Tidak perlu menampilkan alert karena ini hanya pemeriksaan
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Show popup when user scrolls to bottom and is authenticated
   useEffect(() => {
     if (status !== "authenticated") return;
     
-    // Function to check scroll direction and position
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 50;
       
-      // Determine scroll direction
       if (currentScrollY > lastScrollY) {
         setScrollDirection('down');
       } else if (currentScrollY < lastScrollY) {
@@ -118,22 +104,17 @@ export default function FeedbackPopup() {
       
       setLastScrollY(currentScrollY);
       
-      // Only show feedback when scrolled to bottom AND scrolling down
       if (scrolledToBottom && scrollDirection === 'down') {
-        // Aktifkan tombol saat scroll ke bawah dan mencapai bottom
         setIsVisible(true);
         
-        // Tampilkan popup otomatis saat scroll ke bawah mencapai bottom
         if (!showPopup) {
           setTimeout(() => {
             setShowPopup(true);
           }, 1000);
         }
       } else {
-        // Sembunyikan tombol dan popup saat scroll ke atas atau tidak di bottom
         setIsVisible(false);
         
-        // Tutup popup jika sedang terbuka dan user scroll ke atas
         if (showPopup && scrollDirection === 'up') {
           setShowPopup(false);
         }
@@ -150,17 +131,17 @@ export default function FeedbackPopup() {
   };
 
   const handleRatingClick = (value) => {
-    if (!editMode && userFeedback) return; // Jangan izinkan perubahan jika bukan mode edit
+    if (!editMode && userFeedback) return;
     setRating(value);
   };
 
   const handleVote = (value) => {
-    if (!editMode && userFeedback) return; // Jangan izinkan perubahan jika bukan mode edit
+    if (!editMode && userFeedback) return;
     setVote(value);
   };
   
   const handleCommentChange = (e) => {
-    if (!editMode && userFeedback) return; // Jangan izinkan perubahan jika bukan mode edit
+    if (!editMode && userFeedback) return;
     setComment(e.target.value);
   };
   
@@ -168,7 +149,6 @@ export default function FeedbackPopup() {
     setEditMode(!editMode);
   };
 
-  // Update fungsi handleSubmit
   const handleSubmit = async () => {
     if (rating === 0 && !comment && vote === null) {
       alert("Please provide a rating, comment or vote before submitting");
@@ -191,7 +171,6 @@ export default function FeedbackPopup() {
         })
       });
       
-      // Check response type
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         const text = await response.text();
@@ -206,14 +185,13 @@ export default function FeedbackPopup() {
         throw new Error(data.message || 'Failed to submit feedback');
       }
       
-      // Update userFeedback with latest data
       setUserFeedback(data.feedback);
       setEditMode(false);
       setSubmitSuccess(true);
       
       setTimeout(() => {
         setSubmitSuccess(false);
-        setShowPopup(false); // Optional: close the popup after success
+        setShowPopup(false);
       }, 2000);
     } catch (error) {
       console.error("Error submitting feedback:", error);
@@ -223,10 +201,8 @@ export default function FeedbackPopup() {
     }
   };
 
-  // Update the button visibility logic
   const shouldShowButton = status === "authenticated" && isVisible && scrollDirection === 'down';
 
-  // Don't render anything if user is not authenticated
   if (status !== "authenticated") return null;
 
   return (
@@ -287,7 +263,6 @@ export default function FeedbackPopup() {
               </div>
             ) : (
               <div className="space-y-6">
-                {/* Rating Section */}
                 <div>
                   <label className="block text-gray-700 mb-2 font-medium">Bagaimana penilaian Anda tentang Raja Ampat?</label>
                   <div className="flex space-x-1">
@@ -306,7 +281,6 @@ export default function FeedbackPopup() {
                   </div>
                 </div>
 
-                {/* Comment Section */}
                 <div>
                   <label className="block text-gray-700 mb-2 font-medium">Bagikan pendapat Anda (opsional)</label>
                   <textarea
@@ -321,7 +295,6 @@ export default function FeedbackPopup() {
                   ></textarea>
                 </div>
 
-                {/* Vote Section */}
                 <div>
                   <label className="block text-gray-700 mb-2 font-medium">Apakah Anda merekomendasikan Raja Ampat?</label>
                   <div className="flex space-x-4">
@@ -352,7 +325,6 @@ export default function FeedbackPopup() {
                   </div>
                 </div>
 
-                {/* Submit Button - only show if in edit mode or no existing feedback */}
                 {(editMode || !userFeedback) && (
                   <button
                     onClick={handleSubmit}
@@ -376,7 +348,6 @@ export default function FeedbackPopup() {
                   </button>
                 )}
                 
-                {/* Additional info for feedback history */}
                 {userFeedback && !editMode && (
                   <div className="pt-2 text-center text-sm text-gray-500 italic">
                     <p>Feedback dikirim pada {new Date(userFeedback.submitted_at).toLocaleDateString('id-ID', { 

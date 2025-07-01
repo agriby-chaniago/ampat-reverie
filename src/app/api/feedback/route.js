@@ -2,12 +2,10 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { supabaseAdmin } from "@/lib/supabase";
 
-// For submitting new feedback
 export async function POST(request) {
   try {
     console.log("POST /api/feedback called");
     
-    // Check authentication
     const session = await getServerSession();
     if (!session) {
       return NextResponse.json(
@@ -18,13 +16,11 @@ export async function POST(request) {
 
     console.log("Authenticated user:", session.user.email);
     
-    // Parse request body
     const body = await request.json();
     const { rating, comment, vote } = body;
     
     console.log("Feedback data:", { rating, comment, vote });
     
-    // Validate data
     if (rating === undefined && !comment && vote === null) {
       return NextResponse.json(
         { message: "No feedback provided" },
@@ -33,10 +29,8 @@ export async function POST(request) {
     }
 
     try {
-      // IMPORTANT: Declare userData with let, not const
       let userData;
       
-      // Get existing user
       const { data: existingUser, error: userError } = await supabaseAdmin
         .from('users')
         .select('id')
@@ -46,7 +40,6 @@ export async function POST(request) {
       if (userError || !existingUser) {
         console.error("Error finding user:", userError || "User not found");
         
-        // Create user record if it doesn't exist
         const { data: newUser, error: createUserError } = await supabaseAdmin
           .from('users')
           .insert({
@@ -67,13 +60,11 @@ export async function POST(request) {
         console.log("Created new user:", newUser);
         userData = newUser;
       } else {
-        // Assign existing user data
         userData = existingUser;
       }
 
       console.log("User found/created:", userData);
 
-      // Check if user already submitted feedback
       const { data: existingFeedback, error: checkError } = await supabaseAdmin
         .from('feedback')
         .select('id')
@@ -90,7 +81,6 @@ export async function POST(request) {
 
       console.log("Saving new feedback...");
       
-      // Save feedback to Supabase
       const { data: feedback, error } = await supabaseAdmin
         .from('feedback')
         .insert({
@@ -135,12 +125,10 @@ export async function POST(request) {
   }
 }
 
-// For updating existing feedback - similar fix needed here
 export async function PUT(request) {
   try {
     console.log("PUT /api/feedback called");
     
-    // Check authentication
     const session = await getServerSession();
     if (!session) {
       return NextResponse.json(
@@ -151,11 +139,9 @@ export async function PUT(request) {
 
     console.log("Authenticated user:", session.user.email);
     
-    // Parse request body
     const body = await request.json();
     const { id, rating, comment, vote } = body;
     
-    // Validate data
     if (!id) {
       return NextResponse.json(
         { message: "Feedback ID is required" },
@@ -166,7 +152,6 @@ export async function PUT(request) {
     console.log("Update feedback ID:", id);
     
     try {
-      // Get user by email, create if doesn't exist
       let userData;
       
       const { data: existingUser, error: userError } = await supabaseAdmin
@@ -176,7 +161,6 @@ export async function PUT(request) {
         .single();
         
       if (userError || !existingUser) {
-        // Create user record if it doesn't exist
         const { data: newUser, error: createUserError } = await supabaseAdmin
           .from('users')
           .insert({
@@ -199,7 +183,6 @@ export async function PUT(request) {
         userData = existingUser;
       }
 
-      // Check if feedback exists and belongs to this user
       const { data: existingFeedback, error: checkError } = await supabaseAdmin
         .from('feedback')
         .select('id, user_id')
@@ -224,7 +207,6 @@ export async function PUT(request) {
 
       console.log("Updating feedback...");
       
-      // Update feedback
       const { data: updatedFeedback, error } = await supabaseAdmin
         .from('feedback')
         .update({

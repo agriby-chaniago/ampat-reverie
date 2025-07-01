@@ -19,7 +19,6 @@ export default function Footer() {
       }
     };
 
-    // Set initial value
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -30,7 +29,6 @@ export default function Footer() {
 
   return (
     <footer className='relative w-full flex flex-col text-white pt-8 sm:pt-16 md:pt-24 lg:pt-32'>
-      {/* Container Judul - Further reduced size for mobile */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -50,7 +48,6 @@ export default function Footer() {
         </h1>
       </motion.div>
 
-      {/* Container Deskripsi - Further reduced margin for mobile */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -71,7 +68,6 @@ export default function Footer() {
         </p>
       </motion.div>
 
-      {/* Footer Links - 3-column grid for mobile */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -80,7 +76,7 @@ export default function Footer() {
         className='relative z-10 px-3 sm:px-6 md:px-12 py-5 sm:py-10 md:py-12'
       >
         {isMobile ? (
-          // Mobile 3-column layout
+
           <div className="grid grid-cols-3 gap-x-2 gap-y-3">
             <CompactFooterColumn
               title='Ampat Reverie'
@@ -113,7 +109,6 @@ export default function Footer() {
             />
           </div>
         ) : (
-          // Tablet and desktop layout
           <div className="flex flex-wrap justify-center md:justify-evenly gap-8 md:gap-12">
             <FooterColumn
               title='Ampat Reverie'
@@ -151,7 +146,6 @@ export default function Footer() {
         )}
       </motion.div>
 
-      {/* Copyright - Further reduced padding for mobile */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -169,20 +163,19 @@ export default function Footer() {
   );
 }
 
-// Regular Footer Column for tablet and desktop
+
 function FooterColumn({ title, items, isMobile, className = '' }) {
   const handleScrollToSection = (e, href, slideId) => {
     e.preventDefault();
     
-    // First part: Scroll to the section
     const targetId = href.replace("/#", "").replace("#", "");
     const element = document.getElementById(targetId);
     
     if (element) {
-      // Scroll to the element
+
       element.scrollIntoView({ behavior: "smooth" });
       
-      // If we have a slideId, handle slide navigation
+
       if (slideId) {
         setTimeout(() => {
           const slides = ["arborek", "misool", "pasir-timbul", "piaynemo", "teluk-kabui", "wayag"];
@@ -234,7 +227,6 @@ function FooterColumn({ title, items, isMobile, className = '' }) {
   );
 }
 
-// Extra Compact Footer Column for mobile 3-column layout
 function CompactFooterColumn({ title, items }) {
   const handleScrollToSection = (e, href, slideId) => {
     e.preventDefault();

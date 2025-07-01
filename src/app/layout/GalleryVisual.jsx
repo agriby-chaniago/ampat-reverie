@@ -26,7 +26,6 @@ export default function GalleryVisual() {
       }
     };
 
-    // Set initial value
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -41,7 +40,6 @@ export default function GalleryVisual() {
     thumb: `/assets/img/gallery/GalleryVisual_Photo${i + 1}.png`,
   }));
 
-  // Show fewer images on mobile
   const visibleImages = isSmallDevice
     ? dynamicEl.slice(0, 6)
     : dynamicEl.slice(0, 8);
@@ -121,7 +119,6 @@ function GalleryFlex({ images, galleryRef, isMobile, isTablet }) {
 
   return (
     <div className={`mx-auto ${isSmallDevice ? "max-w-2xl" : "max-w-7xl"}`}>
-      {/* Gallery Grid - Responsive for all devices */}
       <div
         className={`
         ${
@@ -142,7 +139,7 @@ function GalleryFlex({ images, galleryRef, isMobile, isTablet }) {
             transition={{
               duration: 0.5,
               ease: "easeOut",
-              delay: Math.min(idx * 0.1, 0.5), // Cap the delay at 0.5s
+              delay: Math.min(idx * 0.1, 0.5), 
             }}
             className={`
               relative border border-white/70 rounded-lg overflow-hidden shadow-md 
@@ -171,7 +168,6 @@ function GalleryFlex({ images, galleryRef, isMobile, isTablet }) {
         ))}
       </div>
 
-      {/* View All Button - Responsive sizing */}
       <motion.div
         className='mt-4 sm:mt-6 mb-4 sm:mb-8 text-center'
         initial={{ opacity: 0, y: 20 }}

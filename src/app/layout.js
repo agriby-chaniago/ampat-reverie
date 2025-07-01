@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import AuthProvider from "./providers/AuthProvider";
 import FeedbackPopup from "./components/feedback/FeedbackPopup";
 
-// Hanya font ECDRegular
 const Gully = localFont({
   src: "./fonts/Gully/Gully-ECDRegular.ttf",
   weight: "400",

@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import UserMenu from "./UserMenu";
 
 export default function TopNarrowSection({ isMobile, isTablet }) {
-  // This component now only renders on tablet and desktop
   return (
     <motion.div
       initial={{ opacity: 0, y: -24 }}

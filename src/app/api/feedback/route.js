@@ -33,14 +33,17 @@ export async function POST(request) {
     }
 
     try {
-      // Get user by email
-      const { data: userData, error: userError } = await supabaseAdmin
+      // IMPORTANT: Declare userData with let, not const
+      let userData;
+      
+      // Get existing user
+      const { data: existingUser, error: userError } = await supabaseAdmin
         .from('users')
         .select('id')
         .eq('email', session.user.email)
         .single();
         
-      if (userError || !userData) {
+      if (userError || !existingUser) {
         console.error("Error finding user:", userError || "User not found");
         
         // Create user record if it doesn't exist
@@ -63,6 +66,9 @@ export async function POST(request) {
         
         console.log("Created new user:", newUser);
         userData = newUser;
+      } else {
+        // Assign existing user data
+        userData = existingUser;
       }
 
       console.log("User found/created:", userData);
